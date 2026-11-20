@@ -14,7 +14,7 @@ pluginManagement {
 }
 
 plugins {
-    // Descarga el JDK 21 del toolchain si no está instalado.
+    // Downloads the toolchain's JDK 21 if it is not installed.
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
@@ -34,7 +34,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "floorday"
 
-// Gradle 9 falla si un proyecto incluido no tiene carpeta: cada include entra con su módulo.
+// Gradle 9 fails if an included project has no folder: each include lands with its module.
 include(":core:domain")
 include(":core:data")
 include(":core:testing")

@@ -6,8 +6,8 @@ import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 /**
- * floorday.kmp.feature: compose + ViewModel + Koin + core:domain y core:designsystem.
- * Sin Navigation 3: los features exponen `XxxRoute(callbacks)` y `:shared` monta el entryProvider.
+ * floorday.kmp.feature: compose + ViewModel + Koin + core:domain and core:designsystem.
+ * No Navigation 3: features expose `XxxRoute(callbacks)` and `:shared` builds the entryProvider.
  */
 class KmpFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

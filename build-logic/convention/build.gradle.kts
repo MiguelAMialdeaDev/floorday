@@ -6,7 +6,7 @@ plugins {
 
 group = "studio.mialdea.floorday.buildlogic"
 
-// Bytecode fijo, sea cual sea el JDK del daemon.
+// Fixed bytecode, whatever the daemon's JDK is.
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -16,12 +16,12 @@ kotlin {
 }
 
 dependencies {
-    // compileOnly: las versiones reales las pone el build.gradle.kts raíz (apply false).
+    // compileOnly: the real versions are set by the root build.gradle.kts (apply false).
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
 
-    // Sin versión: kotlin-dsl la alinea con el Kotlin integrado en Gradle.
+    // No version: kotlin-dsl aligns it with the Kotlin embedded in Gradle.
     testImplementation(kotlin("test-junit"))
 }
 

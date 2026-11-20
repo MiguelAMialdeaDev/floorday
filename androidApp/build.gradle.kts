@@ -2,7 +2,7 @@ plugins {
     id("floorday.android.application")
 }
 
-// namespace, applicationId, versiones, sufijo .debug y firma vienen de floorday.android.application.
+// namespace, applicationId, versions, .debug suffix and signing come from floorday.android.application.
 android {
     defaultConfig {
         manifestPlaceholders["appLabel"] = "Floorday"

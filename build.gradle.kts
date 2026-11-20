@@ -1,5 +1,5 @@
-// Plugins externos cargados una sola vez en el classloader raíz. build-logic los usa como compileOnly.
-// KSP y Room 3 se añaden en el PR de Room; detekt y Kover, en el de calidad.
+// External plugins loaded only once in the root classloader. build-logic uses them as compileOnly.
+// KSP and Room 3 are added in the Room PR; detekt and Kover, in the quality one.
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false

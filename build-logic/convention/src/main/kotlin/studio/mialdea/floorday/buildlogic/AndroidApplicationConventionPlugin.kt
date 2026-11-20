@@ -11,8 +11,8 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 
 /**
- * floorday.android.application: AGP 9 con Kotlin integrado (sin kotlin-android), Compose compiler,
- * firma desde ~/.gradle/gradle.properties con fallback a debug, R8 y versionCode de release desde git.
+ * floorday.android.application: AGP 9 with built-in Kotlin (no kotlin-android), Compose compiler,
+ * signing from ~/.gradle/gradle.properties with debug fallback, R8 and release versionCode from git.
  */
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -48,12 +48,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     applicationId = FloordayBuild.APPLICATION_ID
                     minSdk = catalog.intVersion("android-minSdk")
                     targetSdk = catalog.intVersion("android-targetSdk")
-                    versionCode = 1 // el de release se fija por variante (androidComponents, abajo)
+                    versionCode = 1 // release is set per variant (androidComponents, below)
                     versionName = appVersionName
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
 
-                // Con Kotlin integrado, el jvmTarget de Kotlin sale de targetCompatibility.
+                // With built-in Kotlin, Kotlin's jvmTarget comes from targetCompatibility.
                 compileOptions.apply {
                     sourceCompatibility = jvmTarget
                     targetCompatibility = jvmTarget
@@ -71,7 +71,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 }
 
                 buildTypes.getByName("debug").apply {
-                    // Convive en el móvil con la versión de Play (firma distinta).
+                    // Coexists on the phone with the Play version (different signature).
                     applicationIdSuffix = ".debug"
                     versionNameSuffix = "-debug"
                 }
@@ -82,23 +82,23 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                         getDefaultProguardFile("proguard-android-optimize.txt"),
                         "proguard-rules.pro",
                     )
-                    // Sin claves: firma debug para que assembleRelease funcione en el CI de PR.
-                    // bundleRelease (lo único que se sube a Play) lo bloquea verifyReleaseSigning.
+                    // No keys: debug signing so assembleRelease works in PR CI.
+                    // bundleRelease (the only thing uploaded to Play) is blocked by verifyReleaseSigning.
                     signingConfig = signingConfigs.getByName(if (release != null) "release" else "debug")
                 }
 
-                // Idioma por app (locales_config): sin split de idioma.
+                // Per-app language (locales_config): no language split.
                 bundle.language.enableSplit = false
                 packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
 
                 lint.abortOnError = true
                 lint.checkDependencies = true
-                // compileSdk 37 con targetSdk 36 es deliberado (exigencia de Play desde el 31-ago-2026).
+                // compileSdk 37 with targetSdk 36 is deliberate (Play requirement since 31-Aug-2026).
                 lint.disable += "OldTargetApi"
             }
 
             extensions.configure<ApplicationAndroidComponentsExtension> {
-                // Solo release: debug se queda en 1 y no cambia con cada commit.
+                // Release only: debug stays at 1 and does not change with every commit.
                 onVariants(selector().withBuildType("release")) { variant ->
                     variant.outputs.forEach { output -> output.versionCode.set(gitVersionCode) }
                 }

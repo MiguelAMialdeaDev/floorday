@@ -2,7 +2,7 @@ plugins {
     id("floorday.kmp.library")
 }
 
-// Solo se consume desde configuraciones de test (commonTest de los demás módulos).
+// Only consumed from test configurations (commonTest of the other modules).
 kotlin {
     sourceSets {
         commonMain.dependencies {
