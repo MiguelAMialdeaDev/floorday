@@ -1,0 +1,4 @@
+<resources>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_placeholder">Los ajustes llegan en el siguiente sprint.</string>
+</resources>
