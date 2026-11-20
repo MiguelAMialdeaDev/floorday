@@ -17,7 +17,7 @@ import studio.mialdea.floorday.feature.history.resources.Res
 import studio.mialdea.floorday.feature.history.resources.history_empty
 import studio.mialdea.floorday.feature.history.resources.history_title
 
-/** Pantalla de relleno de S0. El historial real llega en S4. */
+/** S0 placeholder screen. The real history arrives in S4. */
 @Composable
 fun HistoryRoute(modifier: Modifier = Modifier) {
     Scaffold(modifier = modifier) { innerPadding ->

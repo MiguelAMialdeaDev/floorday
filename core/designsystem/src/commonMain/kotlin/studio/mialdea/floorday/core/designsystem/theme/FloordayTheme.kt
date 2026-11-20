@@ -6,7 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-/** Tema provisional de S0. La issue del design system lo sustituye por tokens propios. */
+/** Provisional S0 theme. The design system issue replaces it with its own tokens. */
 @Composable
 fun FloordayTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

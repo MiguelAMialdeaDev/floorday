@@ -23,7 +23,7 @@ import studio.mialdea.floorday.feature.today.resources.today_open_history
 import studio.mialdea.floorday.feature.today.resources.today_open_settings
 import studio.mialdea.floorday.feature.today.resources.today_title
 
-/** Punto de entrada que usa :shared. En la issue "Pantalla Hoy" recibirá su ViewModel. */
+/** Entry point used by :shared. It gets its ViewModel in the "Pantalla Hoy" (Today screen) issue. */
 @Composable
 fun TodayRoute(
     onOpenHistory: () -> Unit,
