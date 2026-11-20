@@ -4,11 +4,11 @@ import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalTime
 
 /**
- * Hora de reloj a la que empieza el día lógico (04:00 por defecto).
+ * Wall-clock time at which the logical day starts (04:00 by default).
  *
- * Se guarda en minutos desde medianoche, igual que `dayStartMinutes` en los ajustes.
- * El rango admitido es de 00:00 a 06:00: más tarde deja de ser "la noche anterior" y el producto
- * no lo necesita. Ampliarlo solo cambia [MAX_MINUTES], el algoritmo funciona con cualquier hora.
+ * Stored as minutes since midnight, same as `dayStartMinutes` in the settings.
+ * The allowed range is 00:00 to 06:00: anything later stops being "the night before" and the product
+ * does not need it. Widening it only changes [MAX_MINUTES]; the algorithm works with any time.
  */
 @JvmInline
 value class DayStart private constructor(val minutesOfDay: Int) {
@@ -38,7 +38,7 @@ value class DayStart private constructor(val minutesOfDay: Int) {
             return ofMinutes(hour * MINUTES_PER_HOUR + minute)
         }
 
-        /** Para leer lo guardado: un valor corrupto o fuera de rango vuelve a 04:00 en vez de romper. */
+        /** For reading stored data: a corrupt or out-of-range value falls back to 04:00 instead of failing. */
         fun fromStoredOrDefault(minutesOfDay: Int?): DayStart =
             if (minutesOfDay != null && minutesOfDay in MIN_MINUTES..MAX_MINUTES) DayStart(minutesOfDay) else Default
     }

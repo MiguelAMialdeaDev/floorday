@@ -5,12 +5,12 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // api: los modelos y contratos públicos exponen tipos de kotlinx-datetime y Flow.
+            // api: the public models and contracts expose kotlinx-datetime and Flow types.
             api(libs.kotlinx.datetime)
             api(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
-            // FakeClock, FakeTimeZoneProvider y builders. No es un ciclo: testing depende de main.
+            // FakeClock, FakeTimeZoneProvider and builders. Not a cycle: testing depends on main.
             implementation(project(":core:testing"))
         }
     }

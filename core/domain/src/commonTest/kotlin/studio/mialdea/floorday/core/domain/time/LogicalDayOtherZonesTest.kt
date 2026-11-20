@@ -12,11 +12,11 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 
 /**
- * Zonas con cambios de hora a medianoche o de 30 min, con fechas ya pasadas (reglas fijas en la base tz).
- * America/Santiago 2024: el 7-abr a las 03:00Z las 24:00 del 6 (-03) vuelven a las 23:00 del 6 (-04);
- * el 8-sep a las 04:00Z las 00:00 (-04) saltan a las 01:00 (-03).
- * America/Havana 2024: 10-mar 00:00 salta a 01:00; 3-nov 01:00 vuelve a 00:00.
- * Australia/Lord_Howe 2024: 7-abr 02:00 vuelve a 01:30; 6-oct 02:00 salta a 02:30.
+ * Zones with clock changes at midnight or of 30 min, on past dates (rules fixed in the tz database).
+ * America/Santiago 2024: on 7-Apr at 03:00Z, 24:00 on the 6th (-03) goes back to 23:00 on the 6th (-04);
+ * on 8-Sep at 04:00Z, 00:00 (-04) jumps to 01:00 (-03).
+ * America/Havana 2024: 10-Mar 00:00 jumps to 01:00; 3-Nov 01:00 goes back to 00:00.
+ * Australia/Lord_Howe 2024: 7-Apr 02:00 goes back to 01:30; 6-Oct 02:00 jumps to 02:30.
  */
 class LogicalDayOtherZonesTest {
 
@@ -27,8 +27,8 @@ class LogicalDayOtherZonesTest {
         val santiago = TimeZone.of("America/Santiago")
         val midnight = DayStart.of(0)
 
-        // A las 03:00Z del 7-abr-2024 el reloj pasa de 23:59:59 (-03) a 23:00 del 6 (-04): las 00:00 del 7
-        // solo existen una vez, a las 04:00Z. El día 6 dura 25 h y la hora repetida sigue siendo el día 6.
+        // At 03:00Z on 7-Apr-2024 the clock goes from 23:59:59 (-03) to 23:00 on the 6th (-04): 00:00 on the 7th
+        // exists only once, at 04:00Z. Day 6 lasts 25 h and the repeated hour is still day 6.
         assertEquals(LocalDate(2024, 4, 6), LogicalDayCalculator.dayOf(utc("2024-04-07T03:30:00Z"), santiago, midnight))
         assertEquals(LocalDate(2024, 4, 7), LogicalDayCalculator.dayOf(utc("2024-04-07T04:00:00Z"), santiago, midnight))
         assertEquals(25.hours, LogicalDayCalculator.lengthOf(LocalDate(2024, 4, 6), santiago, midnight))

@@ -6,20 +6,20 @@ import studio.mialdea.floorday.core.domain.model.Habit
 import studio.mialdea.floorday.core.domain.model.SlotId
 
 /**
- * Estado provisional de un día (abierto o no). No sustituye a DayStatus: al cerrar el día (S4),
- * NOT_STARTED y PARTIAL pasan a MISSED o FROZEN; MET y REST se conservan. Aquí no se gasta nada.
+ * Provisional state of a day (open or not). It does not replace DayStatus: when the day closes (S4),
+ * NOT_STARTED and PARTIAL become MISSED or FROZEN; MET and REST are kept. Nothing is spent here.
  */
 enum class MinimumDayOutcome {
-    /** Todos los requeridos hechos. */
+    /** All required items done. */
     MET,
 
-    /** Algunos hechos, no todos. */
+    /** Some done, not all. */
     PARTIAL,
 
-    /** Ninguno hecho todavía (solo para la UI; no existe en DayStatus). */
+    /** None done yet (UI only; it does not exist in DayStatus). */
     NOT_STARTED,
 
-    /** No hay requeridos ese día (nada activo o todas las tomas omitidas a propósito): neutro. */
+    /** Nothing required that day (nothing active or every dose skipped on purpose): neutral. */
     REST,
 }
 
@@ -29,10 +29,10 @@ data class MinimumDayEvaluation(
     val doneSlotIds: Set<SlotId>,
     val skippedSlotIds: Set<SlotId>,
 ) {
-    /** N del anillo X/N. */
+    /** N of the X/N ring. */
     val required: Int get() = requiredSlotIds.size
 
-    /** X del anillo X/N. */
+    /** X of the X/N ring. */
     val done: Int get() = doneSlotIds.size
 
     val outcome: MinimumDayOutcome
@@ -47,8 +47,8 @@ data class MinimumDayEvaluation(
 }
 
 /**
- * Evalúa el Día Mínimo de un día lógico. Puro: no sabe qué hora es ni en qué zona estás.
- * Es la única fuente del anillo X/N y de "mínimo cumplido" en Hoy.
+ * Evaluates the Minimum Day of a logical day. Pure: it knows neither the time nor your zone.
+ * It is the single source of the X/N ring and of "minimum met" in Today.
  */
 object MinimumDayEvaluator {
 
@@ -69,9 +69,9 @@ object MinimumDayEvaluator {
 enum class MinimumSizeCheck { TOO_FEW, OK, TOO_MANY }
 
 /**
- * El mínimo tiene de 3 a 5 elementos. Un elemento es un hábito, no un momento: la medicación
- * con dos tomas cuenta 1. Es un límite suave que muestran onboarding y "Mi mínimo"; el evaluador
- * funciona igual con 2 o con 6.
+ * The minimum has 3 to 5 items. An item is a habit, not a slot: a medication
+ * with two doses counts as 1. It is a soft limit shown by onboarding and "My minimum"; the evaluator
+ * works the same with 2 or with 6.
  */
 object MinimumSize {
     const val MIN_ITEMS: Int = 3

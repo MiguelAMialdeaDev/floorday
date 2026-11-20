@@ -5,23 +5,23 @@ import studio.mialdea.floorday.core.domain.time.DayStart
 
 enum class WeightUnit { KG, LB, ST }
 
-/** Ajustes del usuario (DataStore "settings"). Viajan en la copia de seguridad. */
+/** User settings (DataStore "settings"). They travel in the backup. */
 data class UserSettings(
     val onboardingDone: Boolean = false,
     val dayStartMinutes: Int = DEFAULT_DAY_START_MINUTES,
-    /** Hora del aviso suave diario; null = sin aviso suave. */
+    /** Time of the daily gentle reminder; null = no gentle reminder. */
     val gentleReminderTime: LocalTime? = null,
     val insistIntervalMin: Int = DEFAULT_INSIST_INTERVAL_MIN,
     val insistMaxRetries: Int = DEFAULT_INSIST_MAX_RETRIES,
     val showNameOnLockScreen: Boolean = false,
-    /** null = según el locale. */
+    /** null = follow the locale. */
     val weightUnit: WeightUnit? = null,
     val haptics: Boolean = true,
 ) {
-    /** Inicio del día lógico; un valor guardado fuera de 00:00 a 06:00 vuelve a 04:00. */
+    /** Start of the logical day; a stored value outside 00:00 to 06:00 falls back to 04:00. */
     val dayStart: DayStart get() = DayStart.fromStoredOrDefault(dayStartMinutes)
 
-    /** Normaliza lo leído del almacenamiento. Las reglas de cada campo viven en su tipo. */
+    /** Normalizes what is read from storage. Each field's rules live in its type. */
     fun sanitized(): UserSettings = copy(dayStartMinutes = dayStart.minutesOfDay)
 
     companion object {
