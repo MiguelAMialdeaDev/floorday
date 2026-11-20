@@ -38,3 +38,4 @@ rootProject.name = "floorday"
 include(":core:domain")
 include(":core:data")
 include(":core:testing")
+include(":core:designsystem")
