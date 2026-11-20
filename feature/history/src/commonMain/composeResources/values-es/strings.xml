@@ -1,0 +1,4 @@
+<resources>
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Aquí aparecerán tus días cerrados.</string>
+</resources>
