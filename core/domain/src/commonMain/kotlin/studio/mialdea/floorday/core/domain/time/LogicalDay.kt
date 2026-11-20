@@ -14,55 +14,55 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * Día lógico: el día D empieza en el primer instante en que el reloj de pared de la zona marca
- * D + [DayStart] y termina justo antes de que empiece D + 1.
+ * Logical day: day D starts at the first instant at which the zone's wall clock reads
+ * D + [DayStart] and ends just before D + 1 starts.
  *
- * Definición formal: `dayOf(i) = máx { D | startOf(D) <= i }`. Con ella:
- * - Cuenta el reloj de pared, no el tiempo transcurrido: 03:59 es el día anterior y 04:00 el nuevo,
- *   también los días de cambio de hora (restar 4 h al instante daría el día equivocado).
- * - Si la hora de inicio cae en el hueco de marzo (no existe), el día empieza en el instante del salto.
- * - Si cae en el solape de octubre (existe dos veces), el día empieza en la primera ocurrencia y
- *   no "vuelve atrás" durante la segunda.
- * - Es monótona: el día lógico nunca retrocede mientras no cambie la zona.
+ * Formal definition: `dayOf(i) = max { D | startOf(D) <= i }`. With it:
+ * - Wall-clock time counts, not elapsed time: 03:59 is the previous day and 04:00 the new one,
+ *   also on clock-change days (subtracting 4 h from the instant would give the wrong day).
+ * - If the start time falls in the March gap (it does not exist), the day starts at the jump instant.
+ * - If it falls in the October overlap (it exists twice), the day starts at the first occurrence and
+ *   does not "go back" during the second one.
+ * - It is monotonic: the logical day never goes backwards while the zone stays the same.
  *
- * Funciones puras: la zona y el instante siempre llegan como parámetro.
+ * Pure functions: the zone and the instant always arrive as parameters.
  */
 object LogicalDayCalculator {
 
     fun dayOf(instant: Instant, timeZone: TimeZone, dayStart: DayStart): LocalDate {
         val local = instant.toLocalDateTime(timeZone)
         val candidate = if (local.time >= dayStart.time) local.date else local.date.minus(1, DateTimeUnit.DAY)
-        // Solo cambia algo en la segunda pasada de un solape: el día siguiente ya empezó en la primera.
+        // Only matters on the second pass of an overlap: the next day already started on the first.
         val next = candidate.plus(1, DateTimeUnit.DAY)
         return if (startOf(next, timeZone, dayStart) <= instant) next else candidate
     }
 
-    /** Primer instante del día lógico [day] (inclusivo). */
+    /** First instant of the logical day [day] (inclusive). */
     fun startOf(day: LocalDate, timeZone: TimeZone, dayStart: DayStart): Instant {
         val wall = day.atTime(dayStart.time)
-        // kotlinx-datetime: en un hueco usa el offset anterior (cae después del salto) y en un solape
-        // devuelve el instante más temprano.
+        // kotlinx-datetime: in a gap it uses the previous offset (lands after the jump) and in an overlap
+        // it returns the earliest instant.
         val instant = wall.toInstant(timeZone)
         return if (instant.toLocalDateTime(timeZone) == wall) instant else gapTransition(wall, timeZone, instant)
     }
 
-    /** Fin exclusivo del día lógico [day]: el inicio del siguiente. */
+    /** Exclusive end of the logical day [day]: the start of the next one. */
     fun endOf(day: LocalDate, timeZone: TimeZone, dayStart: DayStart): Instant =
         startOf(day.plus(1, DateTimeUnit.DAY), timeZone, dayStart)
 
-    /** Duración real del día lógico: 24 h casi siempre, 23 o 25 h si contiene un cambio de hora. */
+    /** Real length of the logical day: almost always 24 h, 23 or 25 h if it has a clock change. */
     fun lengthOf(day: LocalDate, timeZone: TimeZone, dayStart: DayStart): Duration =
         endOf(day, timeZone, dayStart) - startOf(day, timeZone, dayStart)
 
     /**
-     * [wall] no existe en la zona (hueco de DST). Busca el instante del salto: el primero cuyo reloj
-     * de pared es >= [wall]. [afterGap] es lo que devolvió `toInstant`, que ya está después del salto.
-     * Los saltos de la base tz caen en segundos exactos, así que una búsqueda binaria por segundos
-     * da el instante exacto (unas 12 iteraciones para un hueco de 1 h).
+     * [wall] does not exist in the zone (DST gap). Finds the jump instant: the first one whose wall
+     * clock is >= [wall]. [afterGap] is what `toInstant` returned, which is already after the jump.
+     * Transitions in the tz database fall on whole seconds, so a binary search over seconds
+     * gives the exact instant (about 12 iterations for a 1 h gap).
      */
     private fun gapTransition(wall: LocalDateTime, timeZone: TimeZone, afterGap: Instant): Instant {
         val offsetAfter = timeZone.offsetAt(afterGap)
-        // La misma hora de pared con el offset nuevo cae antes del salto.
+        // The same wall time with the new offset lands before the jump.
         var low = wall.toInstant(offsetAfter).epochSeconds
         var high = afterGap.epochSeconds
         while (high - low > 1) {

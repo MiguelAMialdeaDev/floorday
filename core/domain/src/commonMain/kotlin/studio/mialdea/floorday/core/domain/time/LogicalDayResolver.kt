@@ -5,9 +5,9 @@ import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 
 /**
- * Punto de entrada con dependencias inyectadas (Clock y zona) para ViewModels y casos de uso.
- * La lógica vive en [LogicalDayCalculator]; esta clase solo une reloj, zona y ajuste.
- * La zona se pide una vez por llamada, nunca se guarda.
+ * Entry point with injected dependencies (Clock and zone) for ViewModels and use cases.
+ * The logic lives in [LogicalDayCalculator]; this class only wires clock, zone and setting.
+ * The zone is requested once per call and never stored.
  */
 class LogicalDayResolver(
     private val clock: Clock,
@@ -25,8 +25,8 @@ class LogicalDayResolver(
         LogicalDayCalculator.endOf(day, timeZoneProvider.current(), dayStart)
 
     /**
-     * Instante en que empieza el próximo día lógico: `endOf(dayOf(now))`. Es lo que espera el
-     * ticker de Hoy para reemitir el día. Usa una sola lectura de reloj y de zona.
+     * Instant at which the next logical day starts: `endOf(dayOf(now))`. It is what the Today
+     * ticker waits for to re-emit the day. It reads the clock and the zone only once.
      */
     fun nextStart(dayStart: DayStart): Instant {
         val zone = timeZoneProvider.current()

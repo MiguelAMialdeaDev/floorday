@@ -11,7 +11,7 @@ import studio.mialdea.floorday.core.testing.time.TestZones
 
 class LogicalDayResolverTest {
 
-    private val clock = FakeClock(Instant.parse("2026-12-16T04:30:00Z")) // 05:30 en Madrid
+    private val clock = FakeClock(Instant.parse("2026-12-16T04:30:00Z")) // 05:30 in Madrid
     private val zones = FakeTimeZoneProvider(TestZones.MADRID)
     private val resolver = LogicalDayResolver(clock, zones)
 
@@ -19,7 +19,7 @@ class LogicalDayResolverTest {
     fun `today usa el reloj y la zona inyectados`() {
         assertEquals(LocalDate(2026, 12, 16), resolver.today(DayStart.Default))
 
-        clock.set(Instant.parse("2026-12-16T02:00:00Z")) // 03:00 en Madrid
+        clock.set(Instant.parse("2026-12-16T02:00:00Z")) // 03:00 in Madrid
 
         assertEquals(LocalDate(2026, 12, 15), resolver.today(DayStart.Default))
     }
@@ -28,7 +28,7 @@ class LogicalDayResolverTest {
     fun `al cambiar de zona cambia el dia sin tocar el reloj`() {
         assertEquals(LocalDate(2026, 12, 16), resolver.today(DayStart.Default))
 
-        zones.zone = TestZones.NEW_YORK // 23:30 del 15
+        zones.zone = TestZones.NEW_YORK // 23:30 on the 15th
 
         assertEquals(LocalDate(2026, 12, 15), resolver.today(DayStart.Default))
     }
@@ -54,7 +54,7 @@ class LogicalDayResolverTest {
 
     @Test
     fun `el ajuste de inicio del dia se aplica`() {
-        clock.set(Instant.parse("2026-12-15T23:30:00Z")) // 00:30 del 16 en Madrid
+        clock.set(Instant.parse("2026-12-15T23:30:00Z")) // 00:30 on the 16th in Madrid
 
         assertEquals(LocalDate(2026, 12, 15), resolver.today(DayStart.Default))
         assertEquals(LocalDate(2026, 12, 16), resolver.today(DayStart.of(0)))
@@ -62,10 +62,10 @@ class LogicalDayResolverTest {
 
     @Test
     fun `nextStart es el fin del dia logico actual`() {
-        // 05:30 del 16 en Madrid: el día 16 acaba a las 04:00 del 17.
+        // 05:30 on the 16th in Madrid: day 16 ends at 04:00 on the 17th.
         assertEquals(Instant.parse("2026-12-17T03:00:00Z"), resolver.nextStart(DayStart.Default))
 
-        clock.set(Instant.parse("2026-12-16T02:59:00Z")) // 03:59 del 16, todavía es el día 15
+        clock.set(Instant.parse("2026-12-16T02:59:00Z")) // 03:59 on the 16th, still day 15
 
         assertEquals(Instant.parse("2026-12-16T03:00:00Z"), resolver.nextStart(DayStart.Default))
     }
@@ -75,7 +75,7 @@ class LogicalDayResolverTest {
         clock.set(Instant.parse("2026-12-16T02:59:00Z"))
         val first = resolver.nextStart(DayStart.Default)
 
-        clock.advanceBy(1.minutes) // 04:00 en Madrid
+        clock.advanceBy(1.minutes) // 04:00 in Madrid
 
         assertEquals(first, resolver.startOf(LocalDate(2026, 12, 16), DayStart.Default))
         assertEquals(Instant.parse("2026-12-17T03:00:00Z"), resolver.nextStart(DayStart.Default))
@@ -83,7 +83,7 @@ class LogicalDayResolverTest {
 
     @Test
     fun `nextStart respeta el dia corto de marzo`() {
-        clock.set(Instant.parse("2027-03-27T12:00:00Z")) // sábado 27, día lógico de 23 h
+        clock.set(Instant.parse("2027-03-27T12:00:00Z")) // Saturday 27th, 23 h logical day
 
         assertEquals(Instant.parse("2027-03-28T02:00:00Z"), resolver.nextStart(DayStart.Default))
     }

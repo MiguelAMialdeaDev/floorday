@@ -24,7 +24,7 @@ import studio.mialdea.floorday.core.testing.time.TestZones
 private fun Habit.mark(day: LocalDate, slotIndex: Int = 0, status: CompletionStatus = CompletionStatus.DONE) =
     aCompletion(slots[slotIndex], day, status)
 
-/** Medicación ficticia de 1 por la mañana y ½ por la noche: dos momentos. */
+/** Fake medication of 1 in the morning and ½ at night: two slots. */
 private fun oneAndAHalf(name: String = "Vitamina D") = aMedication {
     this.name = name
     slot { label = "Mañana" }
@@ -38,7 +38,7 @@ class MinimumDayEvaluatorTest {
 
     private val wednesday = LocalDate(2026, 12, 16)
 
-    // Mínimo ficticio: una medicación de 1 + ½ y 3 checks.
+    // Fake minimum: a 1 + ½ medication and 3 checks.
     private val vitaminD = oneAndAHalf()
     private val walk = aHabit { name = "Caminar 10 minutos" }
     private val read = aHabit { name = "Leer 5 páginas" }
@@ -192,7 +192,7 @@ class MinimumDayEvaluatorTest {
 
     @Test
     fun `el dia de la semana es el del dia logico y no el del calendario`() {
-        // Lunes 21-dic-2026 a la 01:00 en Madrid: el día lógico es el domingo 20.
+        // Monday 21-Dec-2026 at 01:00 in Madrid: the logical day is Sunday the 20th.
         val instant = Instant.parse("2026-12-21T00:00:00Z")
         val day = LogicalDayCalculator.dayOf(instant, TestZones.MADRID, DayStart.Default)
         val mondayOnly = aHabit { days = DaysOfWeek.of(DayOfWeek.MONDAY) }

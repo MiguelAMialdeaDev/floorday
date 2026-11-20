@@ -6,13 +6,13 @@ import studio.mialdea.floorday.core.domain.model.Habit
 import studio.mialdea.floorday.core.domain.model.SlotId
 
 /**
- * Momentos que hay que cumplir en [day] para que el Día Mínimo cuente como MET.
+ * Slots that must be completed on [day] for the Minimum Day to count as MET.
  *
- * - Cuentan los hábitos con `countsForMinimumOn(day)`: `minimumSince <= day`, día de la semana
- *   activo y sin archivar ese día (archivar es inclusivo).
- * - Cada momento es un requerido: una medicación de 1 + ½ son dos.
- * - Una toma omitida a propósito (SKIPPED en un tipo que lo admite) sale de los requeridos: es neutra.
- * - SKIPPED en un CHECK no existe en el producto; si llega, se ignora y el momento sigue pendiente.
+ * - Habits with `countsForMinimumOn(day)` count: `minimumSince <= day`, the weekday is
+ *   active and not archived that day (archiving is inclusive).
+ * - Each slot is one required item: a 1 + ½ medication is two.
+ * - A dose skipped on purpose (SKIPPED on a kind that allows it) leaves the required set: it is neutral.
+ * - SKIPPED on a CHECK does not exist in the product; if it arrives, it is ignored and the slot stays pending.
  */
 object RequiredSlotsForDay {
 
