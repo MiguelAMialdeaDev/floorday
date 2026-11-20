@@ -5,8 +5,8 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // Se declara ya para validar que resuelve en android, iosArm64 e iosSimulatorArm64.
-            implementation(libs.kotlinx.datetime)
+            // api: los modelos públicos exponen DayOfWeek, LocalDate y LocalTime.
+            api(libs.kotlinx.datetime)
         }
     }
 }
