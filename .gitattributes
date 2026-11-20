@@ -1,0 +1,12 @@
+* text=auto
+# Los scripts deben tener LF para ejecutarse en Linux, macOS y Git Bash (un CRLF rompe bash y los hooks).
+*.sh text eol=lf
+*.py text eol=lf
+.githooks/** text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.png binary
+*.webp binary
+*.jks binary
+*.keystore binary

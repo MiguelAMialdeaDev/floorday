@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": {
+    "pr": "",
+    "sessionUrl": false
+  },
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(./gradlew *)",
+      "Bash(bash .claude/hooks/verify.sh *)",
+      "Bash(bash .githooks/authorship-policy.sh *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git blame *)",
+      "Bash(git branch --show-current)",
+      "Bash(git branch --list *)",
+      "Bash(git switch *)",
+      "Bash(git add *)",
+      "Bash(git restore --staged *)",
+      "Bash(git stash push *)",
+      "Bash(git stash list *)",
+      "Bash(git stash show *)",
+      "Bash(git fetch *)",
+      "Bash(git merge-base *)",
+      "Bash(git rev-parse *)",
+      "Bash(git ls-files *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh run view *)",
+      "Bash(gh run list *)",
+      "WebFetch(domain:developer.android.com)",
+      "WebFetch(domain:kotlinlang.org)",
+      "WebFetch(domain:www.jetbrains.com)",
+      "WebFetch(domain:insert-koin.io)",
+      "WebFetch(domain:docs.gradle.org)",
+      "WebFetch(domain:support.google.com)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:code.claude.com)",
+      "WebFetch(domain:docs.fastlane.tools)"
+    ],
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git rebase *)",
+      "Bash(git reset *)",
+      "Bash(git stash pop *)",
+      "Bash(git stash apply *)",
+      "Bash(gh pr create *)",
+      "Bash(gh issue create *)",
+      "Bash(gh issue edit *)",
+      "WebFetch(domain:github.com)",
+      "Edit(/gradle/libs.versions.toml)",
+      "Edit(/settings.gradle.kts)",
+      "Edit(/build-logic/**)",
+      "Edit(/**/AndroidManifest.xml)",
+      "Edit(/**/proguard-rules.pro)",
+      "Edit(/docs/adr/**)"
+    ],
+    "deny": [
+      "Edit(/AGENTS.md)",
+      "Edit(/**/AGENTS.md)",
+      "Edit(/CLAUDE.md)",
+      "Edit(/**/CLAUDE.md)",
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/hooks/**)",
+      "Edit(/.claude/rules/**)",
+      "Edit(/.claude/skills/**)",
+      "Edit(/.claude/agents/**)",
+      "Edit(/.githooks/**)",
+      "Edit(/.github/**)",
+      "Edit(/fastlane/**)",
+      "Edit(/docs/ai/**)",
+      "Edit(/Gemfile)",
+      "Edit(/Gemfile.lock)",
+      "Edit(/.mcp.json)",
+      "Edit(/.gitattributes)",
+      "Edit(/release-please-config.json)",
+      "Edit(/CHANGELOG.md)",
+      "Edit(/version.txt)",
+      "Edit(/.release-please-manifest.json)",
+      "Bash(git commit-tree *)",
+      "Bash(git replace *)",
+      "Bash(git -c *)",
+      "Bash(git -C *)",
+      "Bash(* --no-verify*)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f *)",
+      "Bash(git push * main)",
+      "Bash(git push * *:main)",
+      "Bash(git config *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(git checkout -- *)",
+      "Bash(git switch --discard-changes *)",
+      "Bash(git switch -C *)",
+      "Bash(git branch -D *)",
+      "Bash(git branch -f *)",
+      "Bash(git stash drop *)",
+      "Bash(git stash clear *)",
+      "Bash(git filter-branch *)",
+      "Bash(git filter-repo *)",
+      "Bash(git update-ref *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh release *)",
+      "Bash(gh secret *)",
+      "Bash(gh variable *)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(gh workflow *)",
+      "Bash(fastlane *)",
+      "Bash(bundle exec fastlane *)",
+      "Bash(./gradlew *publish*)",
+      "Bash(rm -rf *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(adb uninstall *)",
+      "Bash(adb shell pm clear *)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./local.properties)",
+      "Read(./keystore/**)",
+      "Read(./**/*.jks)",
+      "Read(./**/*.keystore)",
+      "Read(./**/*.p12)",
+      "Read(./**/*service-account*.json)",
+      "Read(~/.gradle/gradle.properties)",
+      "Read(~/.ssh/**)",
+      "Edit(/**/schemas/**)",
+      "Edit(/**/build/**)",
+      "Edit(/gradle/wrapper/**)",
+      "Edit(/gradlew)",
+      "Edit(/gradlew.bat)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-edits.sh\"",
+            "timeout": 20,
+            "statusMessage": "Comprobando reglas duras de Floorday"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-commit.sh\"",
+            "timeout": 30,
+            "statusMessage": "Aplicando la política de autoría"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/post-edit.sh\"",
+            "timeout": 90,
+            "statusMessage": "Formateando y revisando"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-verify.sh\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "escritor-tests",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-verify.sh\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}

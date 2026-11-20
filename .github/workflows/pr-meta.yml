@@ -1,0 +1,69 @@
+name: pr-meta
+
+# Check obligatorio barato: se repite al editar la descripción o el título y al cambiar etiquetas,
+# sin recompilar nada. Une lo que en los borradores eran pr-title.yml, el tamaño del PR y la
+# sección "Uso de IA en este PR".
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+
+permissions: {}
+
+concurrency:
+  group: pr-meta-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-meta:
+    name: pr-meta
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Título, tamaño y sección de IA
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const isBot = pr.user.type === 'Bot';
+            const isRelease = pr.head.ref.startsWith('release-please--');
+            const errors = [];
+
+            // 1. Título en Conventional Commits (GitHub lo usa en las notas generadas).
+            const title = pr.title;
+            const cc = /^(feat|fix|perf|refactor|test|build|ci|docs|chore|style|revert|a11y|i18n)(\([a-z0-9._/-]+\))?!?: \S.*$/;
+            if (!cc.test(title)) errors.push(`Título fuera de Conventional Commits: "${title}"`);
+            else if (!isBot && title.length > 72) errors.push(`Título de ${title.length} caracteres (máximo 72)`);
+
+            // 2. Tamaño sin generados: aviso desde 200 líneas, error desde 400 salvo size/exception.
+            if (!isBot && !isRelease) {
+              const generated = [/\/api\//, /\/schemas\//, /\/screenshots\//, /\.png$/, /baseline-prof\.txt$/,
+                                 /^gradle\/wrapper\//, /^gradle\/verification-metadata\.xml$/, /\.lock$/];
+              const files = await github.paginate(github.rest.pulls.listFiles, { ...context.repo, pull_number: pr.number, per_page: 100 });
+              const changed = files.filter(f => !generated.some(g => g.test(f.filename)))
+                                   .reduce((n, f) => n + f.additions + f.deletions, 0);
+              const exception = pr.labels.some(l => l.name === 'size/exception');
+              core.summary.addRaw(`Tamaño del PR: ${changed} líneas sin generados\n`).write();
+              if (changed > 400 && !exception) errors.push(`El PR cambia ${changed} líneas (máximo 400). Divídelo o pon size/exception y explica el motivo.`);
+              else if (changed > 200) core.warning(`${changed} líneas. El objetivo es menos de 200.`);
+            }
+
+            // 3. Sección "Uso de IA en este PR" con sus cinco campos rellenos.
+            if (!isBot && !isRelease) {
+              const body = (pr.body || '').replace(/<!--[\s\S]*?-->/g, '');
+              const m = body.match(/^##\s+Uso de IA en este PR\s*$([\s\S]*?)(?=^##\s|$(?![\s\S]))/m);
+              if (!m) errors.push('Falta la sección "## Uso de IA en este PR" de la plantilla.');
+              else {
+                const fields = ['Autoría', 'Qué hizo Claude', 'Qué decidí y revisé yo', 'Reglas y contexto aplicados', 'Verificación independiente'];
+                const empty = fields.filter(f => {
+                  const line = m[1].match(new RegExp(`\\*\\*${f}:\\*\\*(.*)`));
+                  return !line || line[1].trim().length < 3;
+                });
+                if (empty.length) errors.push(`Campos vacíos en "Uso de IA": ${empty.join(', ')}`);
+              }
+            }
+
+            if (errors.length) core.setFailed(errors.join('\n'));

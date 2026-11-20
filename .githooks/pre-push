@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Hook local de git. Revalida todo lo que se va a subir y el remoto aún no tiene:
+# cubre rebases, amends y commits hechos fuera de Claude Code. fixup! se admite (se aplica
+# con autosquash antes del merge; el CI lo rechaza si llega a revisión final sin aplicar).
+set -euo pipefail
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+remote="$1"
+zero=0000000000000000000000000000000000000000
+status=0
+while read -r local_ref local_sha _remote_ref _remote_sha; do
+  [[ "$local_sha" == "$zero" ]] && continue
+  [[ "$local_ref" == refs/tags/* ]] && continue
+  FLOORDAY_SUBJECT_MODE=local bash "$here/authorship-policy.sh" check-range "remotes=$remote" "$local_sha" </dev/null || status=1
+done
+if ((status)); then
+  printf '\n[pre-push] Corrige los commits marcados (separa zonas, añade o quita el trailer) y vuelve a subir.\n' >&2
+fi
+exit "$status"

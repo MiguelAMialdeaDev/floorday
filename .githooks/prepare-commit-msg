@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Hook local de git. Solo marca los "git commit --amend" para que commit-msg valide el
+# commit completo (HEAD^..índice) y no solo lo añadido en el amend.
+# git pasa: $1 = fichero del mensaje, $2 = origen, $3 = sha. Con --amend: $2=commit, $3=HEAD.
+# (git commit -c/-C HEAD también da commit/HEAD: se trata como amend, caso raro y conservador.)
+set -euo pipefail
+marker="$(git rev-parse --git-dir)/floorday-amend"
+if [[ "${2:-}" == commit && "${3:-}" == HEAD ]]; then
+  : >"$marker"
+else
+  rm -f "$marker"   # marca huérfana de un amend abortado
+fi
+exit 0

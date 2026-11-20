@@ -1,0 +1,93 @@
+name: commit-policy
+
+# Política de autoría (docs/ai/politica-autoria.md, ADR-0015) commit a commit en cada PR.
+# El job se llama "commit-policy": es el nombre del check obligatorio en el ruleset de main.
+# La política se ejecuta tal como está en la rama BASE: un PR no puede relajar la regla que lo juzga.
+# En main la revalida el job commit-policy de main.yml.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: commit-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  commit-policy:
+    name: commit-policy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write # etiquetas autoria:*
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Tomar la política y sus tests de la rama base
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          dir="$RUNNER_TEMP/policy"; mkdir -p "$dir/tests"
+          if git cat-file -e "$BASE_SHA:.githooks/authorship-policy.sh" 2>/dev/null; then
+            git show "$BASE_SHA:.githooks/authorship-policy.sh" > "$dir/authorship-policy.sh"
+            git show "$BASE_SHA:.githooks/prepare-commit-msg" > "$dir/prepare-commit-msg"
+            git show "$BASE_SHA:.githooks/tests/authorship-policy.test.sh" > "$dir/tests/authorship-policy.test.sh"
+          else
+            cp .githooks/authorship-policy.sh .githooks/prepare-commit-msg "$dir/"
+            cp .githooks/tests/authorship-policy.test.sh "$dir/tests/"
+            echo "::warning title=Política de autoría::La base aún no tiene la política; se usa la de este PR (solo en el PR que la introduce)."
+          fi
+          echo "POLICY_DIR=$dir" >> "$GITHUB_ENV"
+
+      - name: Tests de la política (versión de la base)
+        run: bash "$POLICY_DIR/tests/authorship-policy.test.sh"
+
+      - name: Tests de la política (versión del PR, si la cambia)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if ! git diff --quiet "$BASE_SHA" HEAD -- .githooks/; then
+            bash .githooks/tests/authorship-policy.test.sh
+          fi
+
+      - name: Validar cada commit del PR
+        id: authorship
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          FLOORDAY_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: bash "$POLICY_DIR/authorship-policy.sh" check-range "$(git merge-base "$BASE_SHA" "$HEAD_SHA")" "$HEAD_SHA"
+
+      - name: Reparto por zona
+        if: always()
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          {
+            echo; echo "### Reparto en este PR"
+            bash "$POLICY_DIR/authorship-policy.sh" metrics "$(git merge-base "$BASE_SHA" "$HEAD_SHA")..$HEAD_SHA"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Etiquetas de autoría
+        if: always() && steps.authorship.outputs.zones != '' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          ZONES: ${{ steps.authorship.outputs.zones }}
+        with:
+          script: |
+            const map = { assisted: 'autoria:ia', human: 'autoria:humana', release: 'release', bot: 'dependencias' };
+            const labels = [...new Set(process.env.ZONES.split(',').map(z => map[z]).filter(Boolean))];
+            if (!labels.length) return;
+            try {
+              await github.rest.issues.addLabels({ ...context.repo, issue_number: context.payload.pull_request.number, labels });
+            } catch (e) {
+              core.warning(`No se pudieron poner etiquetas: ${e.message}`);
+            }
