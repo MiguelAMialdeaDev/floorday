@@ -5,8 +5,9 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // api: los modelos públicos exponen DayOfWeek, LocalDate y LocalTime.
+            // api: los modelos y contratos públicos exponen tipos de kotlinx-datetime y Flow.
             api(libs.kotlinx.datetime)
+            api(libs.kotlinx.coroutines.core)
         }
     }
 }
