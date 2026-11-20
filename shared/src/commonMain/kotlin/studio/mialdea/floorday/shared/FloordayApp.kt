@@ -22,7 +22,7 @@ fun FloordayApp() {
         NavDisplay(
             backStack = backStack,
             onBack = { backStack.removeLastOrNull() },
-            // El decorador de ViewModel es obligatorio: liga cada ViewModel a su entrada del back stack.
+            // The ViewModel decorator is mandatory: it binds each ViewModel to its back stack entry.
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator(),

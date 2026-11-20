@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- allowBackup=false hasta el PR de reglas de backup (S4). -->
+    <!-- allowBackup=false until the backup rules PR (S4). -->
     <application
         android:name=".FloordayApplication"
         android:allowBackup="false"

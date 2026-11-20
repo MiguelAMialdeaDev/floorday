@@ -17,7 +17,7 @@ import studio.mialdea.floorday.feature.settings.resources.Res
 import studio.mialdea.floorday.feature.settings.resources.settings_placeholder
 import studio.mialdea.floorday.feature.settings.resources.settings_title
 
-/** Pantalla de relleno de S0. Los ajustes reales llegan en S1. */
+/** S0 placeholder screen. The real settings arrive in S1. */
 @Composable
 fun SettingsRoute(modifier: Modifier = Modifier) {
     Scaffold(modifier = modifier) { innerPadding ->

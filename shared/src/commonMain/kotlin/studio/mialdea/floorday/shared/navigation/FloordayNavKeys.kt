@@ -17,8 +17,8 @@ data object HistoryKey : NavKey
 data object SettingsKey : NavKey
 
 /**
- * Cada NavKey nueva TIENE que registrarse aquí y en FloordayNavKeysTest. En Android funciona sin
- * registrarla, pero en iOS falla al guardar el back stack (polimorfismo abierto sin reflexión).
+ * Every new NavKey MUST be registered here and in FloordayNavKeysTest. On Android it works without
+ * registering it, but on iOS it fails when saving the back stack (open polymorphism, no reflection).
  */
 val floordayNavKeyModule: SerializersModule = SerializersModule {
     polymorphic(NavKey::class) {
