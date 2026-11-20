@@ -20,7 +20,7 @@ import studio.mialdea.floorday.core.domain.model.Fixtures.vitaminD
 
 class HabitTest {
 
-    // Construcción válida
+    // Valid construction
 
     @Test
     fun `medicacion con dos momentos de 1 y medio`() {
@@ -37,7 +37,7 @@ class HabitTest {
         assertFalse(habit(minimumSince = null).countsForMinimum)
     }
 
-    // Invariantes de nombre, momentos, días y tiempos
+    // Invariants of name, slots, days and timestamps
 
     @Test
     fun `reglas del nombre`() {
@@ -81,7 +81,7 @@ class HabitTest {
         assertFailsWith<IllegalArgumentException> { habit(sortOrder = -1) }
     }
 
-    // Reglas por tipo
+    // Rules per kind
 
     @Test
     fun `un check no admite cantidad ni unidad ni recordatorio insistente`() {
@@ -110,7 +110,7 @@ class HabitTest {
         }
     }
 
-    // Programación por día
+    // Scheduling per day
 
     @Test
     fun `solo se programa en los dias activos`() {
@@ -140,11 +140,11 @@ class HabitTest {
 
         assertFalse(h.countsForMinimumOn(LocalDate(2026, 11, 24)))
         assertTrue(h.countsForMinimumOn(since))
-        assertFalse(h.countsForMinimumOn(LocalDate(2026, 11, 28))) // sábado
+        assertFalse(h.countsForMinimumOn(LocalDate(2026, 11, 28))) // Saturday
         assertFalse(habit(minimumSince = null).countsForMinimumOn(monday))
     }
 
-    // Registro
+    // Recording
 
     @Test
     fun `record copia la cantidad del momento`() {

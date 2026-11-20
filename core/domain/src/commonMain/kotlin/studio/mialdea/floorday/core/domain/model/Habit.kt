@@ -4,12 +4,12 @@ import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 
 /**
- * Un hábito del usuario. La medicación es un hábito con kind = MEDICATION, varios
- * momentos y cantidad en cuartos. El orden de [slots] es el que ve el usuario y se
- * persiste (columna position).
+ * A user habit. Medication is a habit with kind = MEDICATION, several
+ * slots and an amount in quarters. The order of [slots] is the one the user sees and it is
+ * persisted (position column).
  *
- * Los timestamps los pone el caso de uso con el Clock inyectado; el modelo nunca lee
- * la hora del sistema.
+ * Timestamps are set by the use case with the injected Clock; the model never reads
+ * the system time.
  */
 data class Habit(
     val id: HabitId,
@@ -17,9 +17,9 @@ data class Habit(
     val kind: HabitKind,
     val slots: List<HabitSlot>,
     val days: DaysOfWeek,
-    /** Día lógico desde el que cuenta para el Día Mínimo; null si no cuenta. */
+    /** Logical day from which it counts for the Minimum Day; null if it does not count. */
     val minimumSince: LocalDate?,
-    /** Día lógico en que se archivó; ese día ya no se programa. */
+    /** Logical day on which it was archived; it is no longer scheduled from that day. */
     val archivedOn: LocalDate?,
     val sortOrder: Int,
     val unitLabel: String?,
@@ -59,7 +59,7 @@ data class Habit(
         }
     }
 
-    /** Derivado para que no exista el estado "cuenta pero sin fecha" (ni al revés). */
+    /** Derived so the state "counts but has no date" (or the reverse) cannot exist. */
     val countsForMinimum: Boolean get() = minimumSince != null
 
     val isArchived: Boolean get() = archivedOn != null
@@ -68,13 +68,13 @@ data class Habit(
 
     fun slot(id: SlotId): HabitSlot? = slots.firstOrNull { it.id == id }
 
-    /** El hábito toca ese día lógico: día de la semana activo y no archivado todavía. */
+    /** The habit is due on that logical day: active weekday and not archived yet. */
     fun isScheduledOn(day: LocalDate): Boolean =
         day.dayOfWeek in days && (archivedOn == null || day < archivedOn)
 
     /**
-     * Cuenta para el Día Mínimo ese día lógico. No mira las omisiones a propósito:
-     * eso lo hace el evaluador del Día Mínimo con las Completion del día.
+     * Counts for the Minimum Day on that logical day. It ignores on-purpose skips:
+     * the Minimum Day evaluator handles those with the day's Completions.
      */
     fun countsForMinimumOn(day: LocalDate): Boolean {
         val since = minimumSince ?: return false
@@ -85,9 +85,9 @@ data class Habit(
         status != CompletionStatus.SKIPPED || kind.allowsSkip
 
     /**
-     * Crea el registro de un momento copiando su cantidad actual, para que editar la
-     * cantidad después no reescriba el historial. No comprueba si el día está programado:
-     * una acción de notificación puede llegar tarde y debe poder registrarse.
+     * Creates the record of a slot by copying its current amount, so that editing the
+     * amount later does not rewrite history. It does not check whether the day is scheduled:
+     * a notification action can arrive late and must still be recordable.
      */
     fun record(
         slotId: SlotId,
@@ -113,7 +113,7 @@ data class Habit(
         const val UNIT_LABEL_MAX_LENGTH = 16
         const val MAX_SLOTS = 6
 
-        /** Límite suave de "Mi mínimo" (se explica en la UI, no se impone aquí). */
+        /** Soft limit of "My minimum" (explained in the UI, not enforced here). */
         const val SOFT_MINIMUM_LIMIT = 5
     }
 }

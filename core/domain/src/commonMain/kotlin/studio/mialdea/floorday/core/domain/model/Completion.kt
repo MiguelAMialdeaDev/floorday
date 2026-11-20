@@ -4,18 +4,18 @@ import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 
 /**
- * Lo que pasó con un momento en un día lógico. Hay como máximo uno por (slotId, day):
- * esa es la PK en Room. Deshacer borra la fila. Se crea con [Habit.record], que
- * comprueba que el estado está permitido para el tipo de hábito; el constructor
- * queda público para los mappers de Room.
+ * What happened to a slot on a logical day. There is at most one per (slotId, day):
+ * that is the PK in Room. Undo deletes the row. It is created with [Habit.record], which
+ * checks that the status is allowed for the habit kind; the constructor
+ * stays public for the Room mappers.
  */
 data class Completion(
     val slotId: SlotId,
-    /** Día lógico al que pertenece la marca; no se recalcula desde [recordedAt]. */
+    /** Logical day the mark belongs to; it is not recomputed from [recordedAt]. */
     val day: LocalDate,
     val status: CompletionStatus,
     val recordedAt: Instant,
-    /** Copia de la cantidad del momento al registrar. */
+    /** Copy of the slot's amount at recording time. */
     val amount: Quarters,
     val source: EntrySource,
 ) {
