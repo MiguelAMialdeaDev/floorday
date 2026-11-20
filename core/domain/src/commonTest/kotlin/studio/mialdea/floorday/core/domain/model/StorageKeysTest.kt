@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-/** Las claves se guardan en Room y en el JSON exportado. Cambiarlas exige migración. */
+/** Keys are stored in Room and in the exported JSON. Changing them requires a migration. */
 class StorageKeysTest {
 
     @Test

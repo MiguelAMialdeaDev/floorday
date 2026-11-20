@@ -3,11 +3,11 @@ package studio.mialdea.floorday.core.domain.model
 import kotlinx.datetime.LocalTime
 
 /**
- * Un momento de un hábito: "Mañana 08:00, 1 pastilla". La hora es un LocalTime
- * "flotante" que sigue la zona del dispositivo, nunca un epoch. Una hora que no existe
- * un día de cambio de hora (02:30) es válida aquí: la resuelve ReminderPlanner.
+ * A slot of a habit: "Morning 08:00, 1 pill". The time is a "floating" LocalTime
+ * that follows the device zone, never an epoch. A time that does not exist
+ * on a clock-change day (02:30) is valid here: ReminderPlanner resolves it.
  *
- * [label] puede estar vacío: la UI muestra entonces la hora o la franja.
+ * [label] can be empty: the UI then shows the time or the time band.
  */
 data class HabitSlot(
     val id: SlotId,

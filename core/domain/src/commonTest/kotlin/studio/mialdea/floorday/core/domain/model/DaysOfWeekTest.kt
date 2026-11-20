@@ -11,7 +11,7 @@ class DaysOfWeekTest {
 
     @Test
     fun `el bitmask empieza en lunes y es estable`() {
-        // Contrato con la BD y el JSON: no cambiar sin migración.
+        // Contract with the DB and the JSON: do not change without a migration.
         assertEquals(1, DaysOfWeek.of(DayOfWeek.MONDAY).mask)
         assertEquals(2, DaysOfWeek.of(DayOfWeek.TUESDAY).mask)
         assertEquals(64, DaysOfWeek.of(DayOfWeek.SUNDAY).mask)

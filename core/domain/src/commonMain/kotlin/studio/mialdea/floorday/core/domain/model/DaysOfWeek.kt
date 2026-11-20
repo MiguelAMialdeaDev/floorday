@@ -5,11 +5,11 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.isoDayNumber
 
 /**
- * Conjunto de días de la semana guardado como bitmask fijo L..D: lunes es el bit 0
- * (valor 1) y domingo el bit 6 (valor 64). Ese orden es un contrato con la BD y el
- * JSON exportado: no depende del locale. La UI decide qué día pinta primero.
+ * Set of weekdays stored as a fixed Mon..Sun bitmask: Monday is bit 0
+ * (value 1) and Sunday is bit 6 (value 64). That order is a contract with the DB and the
+ * exported JSON: it does not depend on the locale. The UI decides which day it draws first.
  *
- * Puede estar vacío para que el borrador del editor lo represente; un [Habit] no.
+ * It can be empty so the editor draft can represent it; a [Habit] cannot.
  */
 @JvmInline
 value class DaysOfWeek(val mask: Int) {
@@ -30,7 +30,7 @@ value class DaysOfWeek(val mask: Int) {
 
     fun toggle(day: DayOfWeek): DaysOfWeek = if (day in this) this - day else this + day
 
-    /** Días en orden ISO (lunes primero). */
+    /** Days in ISO order (Monday first). */
     fun toSet(): Set<DayOfWeek> = DayOfWeek.entries.filterTo(LinkedHashSet()) { it in this }
 
     override fun toString(): String = "DaysOfWeek(${toSet().joinToString()})"

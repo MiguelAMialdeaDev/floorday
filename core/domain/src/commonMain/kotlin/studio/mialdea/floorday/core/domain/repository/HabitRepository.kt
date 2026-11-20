@@ -6,23 +6,23 @@ import studio.mialdea.floorday.core.domain.model.Habit
 import studio.mialdea.floorday.core.domain.model.HabitId
 
 interface HabitRepository {
-    /** Ordenados por sortOrder y después por nombre. */
+    /** Sorted by sortOrder and then by name. */
     fun observeHabits(includeArchived: Boolean = false): Flow<List<Habit>>
 
     suspend fun getHabit(id: HabitId): Habit?
 
     /**
-     * Inserta o actualiza el hábito y deja sus momentos exactamente como `habit.slots`,
-     * en una sola transacción. Exige al menos un momento. Quitar un momento borra su historial.
+     * Inserts or updates the habit and leaves its slots exactly as `habit.slots`,
+     * in a single transaction. Requires at least one slot. Removing a slot deletes its history.
      */
     suspend fun save(habit: Habit)
 
-    /** `on = null` desarchiva. */
+    /** `on = null` unarchives. */
     suspend fun archive(id: HabitId, on: LocalDate?)
 
-    /** Borra el hábito, sus momentos y su historial (CASCADE). */
+    /** Deletes the habit, its slots and its history (CASCADE). */
     suspend fun delete(id: HabitId)
 
-    /** sortOrder para un hábito nuevo: el máximo actual más 1, o 0 si no hay ninguno. */
+    /** sortOrder for a new habit: the current maximum plus 1, or 0 if there are none. */
     suspend fun nextSortOrder(): Int
 }

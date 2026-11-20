@@ -3,18 +3,18 @@ package studio.mialdea.floorday.core.domain.model
 import kotlin.jvm.JvmInline
 import kotlin.uuid.Uuid
 
-/** Identificador de un hábito. Envuelve el Uuid para no confundirlo con un [SlotId]. */
+/** Identifier of a habit. Wraps the Uuid so it is not confused with a [SlotId]. */
 @JvmInline
 value class HabitId(val value: Uuid) {
     override fun toString(): String = value.toString()
 
     companion object {
-        /** Lanza IllegalArgumentException si el texto no es un UUID válido. */
+        /** Throws IllegalArgumentException if the text is not a valid UUID. */
         fun parse(text: String): HabitId = HabitId(Uuid.parse(text))
     }
 }
 
-/** Identificador de un momento (toma o check) dentro de un hábito. */
+/** Identifier of a slot (dose or check) within a habit. */
 @JvmInline
 value class SlotId(val value: Uuid) {
     override fun toString(): String = value.toString()
@@ -25,14 +25,14 @@ value class SlotId(val value: Uuid) {
 }
 
 /**
- * Origen de ids inyectable. En producción es [Random]; en tests, una secuencia fija
- * para que los ids sean deterministas.
+ * Injectable id source. In production it is [Random]; in tests, a fixed sequence
+ * so that ids are deterministic.
  */
 fun interface IdGenerator {
     fun newUuid(): Uuid
 
     companion object {
-        /** Uuid.random() es estable en Kotlin 2.4: no necesita opt-in. */
+        /** Uuid.random() is stable in Kotlin 2.4: it needs no opt-in. */
         val Random: IdGenerator = IdGenerator { Uuid.random() }
     }
 }

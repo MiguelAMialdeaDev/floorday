@@ -6,12 +6,12 @@ import studio.mialdea.floorday.core.domain.model.Completion
 import studio.mialdea.floorday.core.domain.model.SlotId
 
 interface CompletionRepository {
-    /** `day` es el día lógico, no la fecha civil. */
+    /** `day` is the logical day, not the calendar date. */
     fun observeDay(day: LocalDate): Flow<List<Completion>>
 
-    /** Una sola fila por (slotId, day): marcar otra vez reemplaza. */
+    /** A single row per (slotId, day): marking again replaces it. */
     suspend fun upsert(completion: Completion)
 
-    /** Deshacer: borra la fila. Si no existe, no hace nada. */
+    /** Undo: deletes the row. If it does not exist, does nothing. */
     suspend fun remove(slotId: SlotId, day: LocalDate)
 }

@@ -4,7 +4,7 @@ import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
-/** Datos ficticios del módulo. Los builders compartidos viven en :core:testing. */
+/** Fake data for this module. The shared builders live in :core:testing. */
 internal object Fixtures {
     val habitId = HabitId.parse("00000000-0000-4000-8000-000000000001")
     val morningSlotId = SlotId.parse("00000000-0000-4000-8000-000000000011")
@@ -12,7 +12,7 @@ internal object Fixtures {
 
     val t0: Instant = Instant.parse("2026-11-23T08:00:00Z")
 
-    /** 23-nov-2026 es lunes. */
+    /** 23-Nov-2026 is a Monday. */
     val monday = LocalDate(2026, 11, 23)
 
     fun slotIdFor(index: Int): SlotId =
@@ -52,7 +52,7 @@ internal object Fixtures {
         updatedAt = updatedAt,
     )
 
-    /** Medicación ficticia de 1 por la mañana y ½ por la noche, ambas insistentes. */
+    /** Fake medication of 1 in the morning and ½ at night, both insistent. */
     fun vitaminD() = habit(
         kind = HabitKind.MEDICATION,
         name = "Vitamina D",

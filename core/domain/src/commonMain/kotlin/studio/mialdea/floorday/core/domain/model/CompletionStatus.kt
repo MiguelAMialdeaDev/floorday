@@ -1,11 +1,11 @@
 package studio.mialdea.floorday.core.domain.model
 
-/** Deshacer no es un estado: borra la fila de (slotId, day). */
+/** Undo is not a status: it deletes the (slotId, day) row. */
 enum class CompletionStatus(val key: String) {
-    /** Hecho o tomada. */
+    /** Done or taken. */
     DONE("done"),
 
-    /** Omitida a propósito (solo medicación): sale de los requeridos del día. */
+    /** Skipped on purpose (medication only): it leaves the day's required set. */
     SKIPPED("skipped"),
     ;
 

@@ -1,13 +1,13 @@
 package studio.mialdea.floorday.core.domain.model
 
 enum class ReminderMode(val key: String) {
-    /** Sin aviso. */
+    /** No reminder. */
     NONE("none"),
 
-    /** Entra en el aviso suave diario (como máximo 1 al día). No necesita hora propia. */
+    /** Included in the daily gentle reminder (at most 1 per day). Needs no time of its own. */
     GENTLE("gentle"),
 
-    /** Alarma exacta a la hora del momento, con reintentos. Solo medicación. */
+    /** Exact alarm at the slot's time, with retries. Medication only. */
     INSISTENT("insistent"),
     ;
 
