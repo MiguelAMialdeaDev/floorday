@@ -36,5 +36,13 @@ tasks.validatePlugins {
 
 gradlePlugin {
     plugins {
+        register("floordayKmpLibrary") {
+            id = libs.plugins.floorday.kmp.library.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.KmpLibraryConventionPlugin"
+        }
+        register("floordayQuality") {
+            id = libs.plugins.floorday.quality.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.QualityConventionPlugin"
+        }
     }
 }
