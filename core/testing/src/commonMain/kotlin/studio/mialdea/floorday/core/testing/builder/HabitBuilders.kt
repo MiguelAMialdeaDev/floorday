@@ -18,7 +18,7 @@ import studio.mialdea.floorday.core.testing.time.TestDates
 @DslMarker
 annotation class FloordayTestDsl
 
-/** Uuid determinista y legible en los fallos: uuidOf(1) = 00000000-0000-0000-0000-000000000001. */
+/** Deterministic Uuid, readable in failures: uuidOf(1) = 00000000-0000-0000-0000-000000000001. */
 fun uuidOf(n: Int): Uuid = Uuid.fromLongs(0L, n.toLong())
 
 fun habitIdOf(n: Int): HabitId = HabitId(uuidOf(n))
@@ -50,7 +50,7 @@ class HabitBuilder internal constructor() {
     var kind: HabitKind = HabitKind.CHECK
     var days: DaysOfWeek = DaysOfWeek.EVERY_DAY
 
-    /** null = fuera del Día Mínimo. */
+    /** null = outside the Minimum Day. */
     var minimumSince: LocalDate? = TestDates.BASELINE
     var archivedOn: LocalDate? = null
     var sortOrder: Int = 0
@@ -83,10 +83,10 @@ class HabitBuilder internal constructor() {
     }
 }
 
-/** Hábito CHECK válido con un momento si no declaras ninguno. */
+/** Valid CHECK habit, with one slot if you declare none. */
 fun aHabit(block: HabitBuilder.() -> Unit = {}): Habit = HabitBuilder().apply(block).build()
 
-/** Medicación ficticia: por defecto un momento a las 08:00, 1 unidad, recordatorio insistente. */
+/** Fake medication: by default one slot at 08:00, 1 unit, insistent reminder. */
 fun aMedication(block: HabitBuilder.() -> Unit = {}): Habit = HabitBuilder().apply {
     kind = HabitKind.MEDICATION
     name = "Vitamina D"

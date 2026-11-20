@@ -12,7 +12,7 @@ import studio.mialdea.floorday.core.testing.time.instantOf
 
 private val NOON = LocalTime(12, 0)
 
-/** Marca de un momento. No valida el tipo de hábito: para eso está Habit.record. */
+/** Mark for a slot. It does not validate the habit kind: that is what Habit.record is for. */
 fun aCompletion(
     slot: HabitSlot,
     day: LocalDate,

@@ -4,13 +4,13 @@ import kotlin.concurrent.Volatile
 import kotlinx.datetime.TimeZone
 import studio.mialdea.floorday.core.domain.time.TimeZoneProvider
 
-/** Zona que el test cambia en caliente para simular un viaje. */
+/** Zone the test changes on the fly to simulate a trip. */
 class FakeTimeZoneProvider(initial: TimeZone = TestZones.MADRID) : TimeZoneProvider {
 
     @Volatile
     var zone: TimeZone = initial
 
-    /** Veces que se ha pedido la zona: sirve para comprobar que nadie la guarda. */
+    /** Times the zone has been requested: used to check that nobody stores it. */
     var calls: Int = 0
         private set
 

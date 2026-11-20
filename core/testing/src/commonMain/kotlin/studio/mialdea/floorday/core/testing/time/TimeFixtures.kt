@@ -14,20 +14,20 @@ object TestZones {
 }
 
 object TestDates {
-    /** Fecha base para minimumSince en los builders. */
+    /** Base date for minimumSince in the builders. */
     val BASELINE: LocalDate = LocalDate(2026, 11, 1)
     val SPRINT0_END: LocalDate = LocalDate(2026, 12, 6)
 
-    /** Europe/Madrid salta de 02:00 a 03:00. */
+    /** Europe/Madrid jumps from 02:00 to 03:00. */
     val DST_SPRING_2027: LocalDate = LocalDate(2027, 3, 28)
 
-    /** Europe/Madrid repite de 02:00 a 03:00. */
+    /** Europe/Madrid repeats 02:00 to 03:00. */
     val DST_AUTUMN_2027: LocalDate = LocalDate(2027, 10, 31)
 }
 
 /**
- * Semántica de kotlinx-datetime: en un hueco DST usa el offset anterior
- * (02:30 del 28-mar-2027 = 01:30Z = 03:30 CEST); en un solape, el instante más temprano.
+ * kotlinx-datetime semantics: in a DST gap it uses the previous offset
+ * (02:30 on 28-Mar-2027 = 01:30Z = 03:30 CEST); in an overlap, the earliest instant.
  */
 fun instantOf(date: LocalDate, time: LocalTime, zone: TimeZone = TestZones.MADRID): Instant =
     LocalDateTime(date, time).toInstant(zone)

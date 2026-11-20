@@ -8,7 +8,7 @@ import studio.mialdea.floorday.core.domain.model.Habit
 import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.core.domain.repository.HabitRepository
 
-/** El único HabitRepository en memoria del repo. Comparte store con InMemoryCompletionRepository. */
+/** The only in-memory HabitRepository in the repo. Shares the store with InMemoryCompletionRepository. */
 class InMemoryHabitRepository(
     private val store: InMemoryFloordayStore = InMemoryFloordayStore(),
 ) : HabitRepository {
@@ -25,7 +25,7 @@ class InMemoryHabitRepository(
     override suspend fun getHabit(id: HabitId): Habit? = store.tables.value.habits[id]
 
     override suspend fun save(habit: Habit) {
-        // Igual que Room: sin momentos se borraría todo el historial del hábito.
+        // Same as Room: without slots the habit's whole history would be deleted.
         require(habit.slots.isNotEmpty()) { "Un hábito necesita al menos un momento" }
         store.write { t ->
             val kept = habit.slots.map { it.id }.toSet()
@@ -57,7 +57,7 @@ class InMemoryHabitRepository(
     override suspend fun nextSortOrder(): Int =
         (store.tables.value.habits.values.maxOfOrNull { it.sortOrder } ?: -1) + 1
 
-    /** Siembra sin suspender, para el arrange de los tests. */
+    /** Non-suspending seeding, for the tests' arrange step. */
     fun seed(vararg habits: Habit) {
         store.seed { t -> t.copy(habits = t.habits + habits.associateBy { it.id }) }
     }
