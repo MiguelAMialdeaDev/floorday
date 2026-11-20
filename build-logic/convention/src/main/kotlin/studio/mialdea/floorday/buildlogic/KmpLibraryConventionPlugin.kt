@@ -3,7 +3,7 @@ package studio.mialdea.floorday.buildlogic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-/** floorday.kmp.library: KMP + Android KMP library + iosArm64/iosSimulatorArm64 + JDK 21/bytecode 17 + calidad. */
+/** floorday.kmp.library: KMP + Android KMP library + iosArm64/iosSimulatorArm64 + JDK 21/bytecode 17 + quality. */
 class KmpLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {

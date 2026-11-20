@@ -10,7 +10,7 @@ import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-/** floorday.kmp.compose: floorday.kmp.library + Compose Multiplatform + recursos que funcionan en Android. */
+/** floorday.kmp.compose: floorday.kmp.library + Compose Multiplatform + resources that work on Android. */
 class KmpComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -23,7 +23,7 @@ class KmpComposeConventionPlugin : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
                 targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
-                    // Sin esto, las Compose resources fallan en runtime con MissingResourceException.
+                    // Without this, Compose resources fail at runtime with MissingResourceException.
                     androidResources { enable = true }
                     compilations.withType<KotlinMultiplatformAndroidHostTestCompilation>().configureEach {
                         isIncludeAndroidResources = true
@@ -40,10 +40,10 @@ class KmpComposeConventionPlugin : Plugin<Project> {
                 }
             }
 
-            // Preview de Android Studio: ui-tooling solo en runtime, nunca en la API de la librería.
+            // Android Studio preview: ui-tooling only at runtime, never in the library's API.
             dependencies.add("androidRuntimeClasspath", catalog.library("compose-ui-tooling"))
 
-            // Res en <namespace>.resources; sigue siendo internal (publicResClass = false por defecto).
+            // Res in <namespace>.resources; it stays internal (publicResClass = false by default).
             extensions.configure<ComposeExtension> {
                 extensions.configure<ResourcesExtension> {
                     packageOfResClass = "$moduleNamespace.resources"

@@ -20,13 +20,13 @@ kotlin {
             implementation(project(":feature:history"))
             implementation(project(":feature:settings"))
 
-            // navigation3-ui (JetBrains) trae como api androidx.navigation3:navigation3-runtime
-            // (NavKey, entryProvider) y androidx.savedstate (SavedStateConfiguration).
+            // navigation3-ui (JetBrains) brings in as api androidx.navigation3:navigation3-runtime
+            // (NavKey, entryProvider) and androidx.savedstate (SavedStateConfiguration).
             implementation(libs.navigation3.ui)
             implementation(libs.lifecycle.viewmodel.navigation3)
             implementation(libs.kotlinx.serialization.core)
 
-            // api: initKoin expone KoinApplication y Module, y el BOM debe viajar con koin-core.
+            // api: initKoin exposes KoinApplication and Module, and the BOM must travel with koin-core.
             api(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
         }

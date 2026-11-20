@@ -12,7 +12,7 @@ sealed interface SigningResolution {
     data class DebugFallback(val missingKeys: List<String>) : SigningResolution
 }
 
-/** Lee las 4 claves de ~/.gradle/gradle.properties (o -P). Un valor en blanco cuenta como ausente. */
+/** Reads the 4 keys from ~/.gradle/gradle.properties (or -P). A blank value counts as missing. */
 object ReleaseSigningResolver {
     const val KEYSTORE_PATH = "FLOORDAY_KEYSTORE_PATH"
     const val KEYSTORE_PASSWORD = "FLOORDAY_KEYSTORE_PASSWORD"

@@ -1,11 +1,11 @@
-# Floorday: catálogo de versiones verificado el 20-nov-2026.
-# Cada versión tiene su fuente oficial en la descripción del PR "build: version catalog".
-# Regla: solo estables, salvo material3 (CMP solo publica alpha desde 1.10) y detekt
-# (la 1.23.8 no soporta Kotlin 2.4 ni AGP 9). Ambas excepciones van en el ADR de build.
+# Floorday: version catalog verified on 20-Nov-2026.
+# Every version has its official source in the description of the PR "build: version catalog".
+# Rule: stable only, except material3 (CMP only publishes alphas since 1.10) and detekt
+# (1.23.8 supports neither Kotlin 2.4 nor AGP 9). Both exceptions go in the build ADR.
 
 [versions]
-# SDK. compileSdk 37 es obligatorio: Compose 1.12.1, Lifecycle 2.11.0 y core 1.19.1
-# declaran minCompileSdk=37 y AGP >= 9.1.0 en su aar-metadata.
+# SDK. compileSdk 37 is mandatory: Compose 1.12.1, Lifecycle 2.11.0 and core 1.19.1
+# declare minCompileSdk=37 and AGP >= 9.1.0 in their aar-metadata.
 android-compileSdk = "37"
 android-targetSdk = "36"
 android-minSdk = "28"
@@ -15,9 +15,9 @@ jvmTarget = "17"
 kotlin = "2.4.21"
 ksp = "2.3.14"
 agp = "9.5.1"
-# Gradle va en gradle/wrapper/gradle-wrapper.properties: 9.7.1
+# Gradle lives in gradle/wrapper/gradle-wrapper.properties: 9.7.1
 
-# Compose Multiplatform y librerías JetBrains que lo acompañan (tabla de v1.12.2)
+# Compose Multiplatform and the JetBrains libraries that go with it (v1.12.2 table)
 compose-multiplatform = "1.12.2"
 compose-material3 = "1.12.0-alpha03"
 jetbrains-lifecycle = "2.11.0"
@@ -26,7 +26,7 @@ jetbrains-navigation3 = "1.2.0"
 # DI
 koin = "4.2.2"
 
-# Persistencia
+# Persistence
 room3 = "3.0.3"
 sqlite = "2.7.1"
 datastore = "1.3.0"
@@ -36,13 +36,13 @@ kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.13.0"
 kotlinx-datetime = "0.8.0"
 
-# AndroidX solo para :androidApp
+# AndroidX only for :androidApp
 androidx-core = "1.19.1"
 androidx-activity = "1.13.0"
 androidx-work = "2.12.0"
 androidx-glance = "1.2.0"
 
-# Calidad y tests
+# Quality and tests
 detekt = "2.0.0-alpha.6"
 kover = "0.9.11"
 roborazzi = "1.79.0"
@@ -52,7 +52,7 @@ junit4 = "4.13.2"
 androidx-test-core = "1.7.0"
 
 [libraries]
-# Compose Multiplatform (coordenadas directas, sin los accesores compose.*)
+# Compose Multiplatform (direct coordinates, without the compose.* accessors)
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
@@ -62,7 +62,7 @@ compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
 
-# Lifecycle y Navigation 3 multiplatform (JetBrains)
+# Lifecycle and Navigation 3 multiplatform (JetBrains)
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrains-lifecycle" }
 lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetbrains-lifecycle" }
 lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "jetbrains-lifecycle" }
@@ -112,10 +112,10 @@ roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = 
 roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-junit-rule = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
 
-# detekt: reglas de formato (ktlint) para floorday.quality
+# detekt: formatting rules (ktlint) for floorday.quality
 detekt-rules-ktlint-wrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 
-# build-logic (compileOnly en build-logic/convention)
+# build-logic (compileOnly in build-logic/convention)
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-compiler-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }

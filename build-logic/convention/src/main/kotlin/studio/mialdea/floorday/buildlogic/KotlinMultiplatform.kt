@@ -12,21 +12,21 @@ internal fun Project.configureKotlinMultiplatform() {
     val moduleNamespace = FloordayBuild.namespaceFor(path)
 
     extensions.configure<KotlinMultiplatformExtension> {
-        // Toolchain 21 para compilar y ejecutar tests; bytecode 17 en el target Android.
+        // Toolchain 21 to compile and run tests; bytecode 17 on the Android target.
         jvmToolchain(FloordayBuild.JDK_TOOLCHAIN)
 
-        // Sin iosX64: no hay Macs Intel en el plan.
+        // No iosX64: there are no Intel Macs in the plan.
         iosArm64()
         iosSimulatorArm64()
 
-        // El target Android es el mismo objeto que el bloque `kotlin { android {} }`.
+        // The Android target is the same object as the `kotlin { android {} }` block.
         targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
             namespace = moduleNamespace
             compileSdk = catalog.intVersion("android-compileSdk")
             minSdk = catalog.intVersion("android-minSdk")
             compilerOptions.jvmTarget.set(JvmTarget.fromTarget(catalog.stringVersion("jvmTarget")))
-            // commonTest se ejecuta en la JVM dentro de androidHostTest. Los módulos NO deben
-            // volver a llamar a withHostTest: AGP falla si la compilación se crea dos veces.
+            // commonTest runs on the JVM inside androidHostTest. Modules must NOT
+            // call withHostTest again: AGP fails if the compilation is created twice.
             withHostTest {}
         }
 
@@ -38,7 +38,7 @@ internal fun Project.configureKotlinMultiplatform() {
             implementation(catalog.library("kotlinx-coroutines-test"))
             implementation(catalog.library("turbine"))
         }
-        // Sin esto, kotlin.test.Test puede quedarse sin actual en el target Android externo.
+        // Without this, kotlin.test.Test may end up without an actual on the external Android target.
         sourceSets.matching { it.name == "androidHostTest" }.configureEach {
             dependencies { implementation(catalog.library("kotlin-test-junit")) }
         }

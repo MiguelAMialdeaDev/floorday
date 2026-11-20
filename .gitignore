@@ -1,4 +1,4 @@
-# Gradle y Kotlin
+# Gradle and Kotlin
 .gradle/
 .kotlin/
 build/
@@ -6,24 +6,24 @@ local.properties
 hs_err_pid*.log
 replay_pid*.log
 
-# IDE y sistema
+# IDE and system
 .idea/
 *.iml
 captures/
 .DS_Store
 xcuserdata/
 
-# Firma: nunca en el repo
+# Signing: never in the repo
 *.jks
 *.keystore
 *.p12
 keystore/
 
-# Probes locales de build-logic (no se commitean)
+# Local build-logic probes (not committed)
 /probe/
 /probe-app/
 
-# Capa de IA: ficheros locales de cada persona
+# AI layer: each person's local files
 CLAUDE.local.md
 .claude/settings.local.json
 .claude/.state/
