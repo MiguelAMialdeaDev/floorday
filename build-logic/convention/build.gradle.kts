@@ -48,6 +48,10 @@ gradlePlugin {
             id = libs.plugins.floorday.kmp.feature.get().pluginId
             implementationClass = "studio.mialdea.floorday.buildlogic.KmpFeatureConventionPlugin"
         }
+        register("floordayAndroidApplication") {
+            id = libs.plugins.floorday.android.application.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.AndroidApplicationConventionPlugin"
+        }
         register("floordayRoom") {
             id = libs.plugins.floorday.room.get().pluginId
             implementationClass = "studio.mialdea.floorday.buildlogic.RoomConventionPlugin"
