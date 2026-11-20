@@ -35,3 +35,6 @@ dependencyResolutionManagement {
 rootProject.name = "floorday"
 
 // Gradle 9 falla si un proyecto incluido no tiene carpeta: cada include entra con su módulo.
+include(":core:domain")
+include(":core:data")
+include(":core:testing")
