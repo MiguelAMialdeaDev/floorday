@@ -8,7 +8,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 
-/** Reloj manual. No avanza solo: usa advanceBy, set o setLocal. */
+/** Manual clock. It does not advance on its own: use advanceBy, set or setLocal. */
 class FakeClock(start: Instant = DEFAULT_START) : Clock {
 
     @Volatile
@@ -24,14 +24,14 @@ class FakeClock(start: Instant = DEFAULT_START) : Clock {
         current = instantOf(date, time, zone)
     }
 
-    /** Solo hacia delante. Para simular que el usuario retrasa la hora, usa set. */
+    /** Forward only. To simulate the user setting the clock back, use set. */
     fun advanceBy(duration: Duration) {
         require(!duration.isNegative()) { "advanceBy necesita una duración positiva: $duration" }
         current += duration
     }
 
     companion object {
-        /** 1-dic-2026 a las 08:00 en Madrid (UTC+1). */
+        /** 1-Dec-2026 at 08:00 in Madrid (UTC+1). */
         val DEFAULT_START: Instant = Instant.parse("2026-12-01T07:00:00Z")
     }
 }

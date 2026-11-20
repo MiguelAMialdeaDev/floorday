@@ -6,8 +6,8 @@ import studio.mialdea.floorday.core.domain.model.Quarters
 import studio.mialdea.floorday.core.domain.model.ReminderMode
 
 /**
- * Un Día Mínimo de 4 momentos (incluye "1 + ½ = dos momentos") más un hábito fuera del mínimo.
- * Datos ficticios: nunca fármacos reales ni datos personales, el repo puede ser público.
+ * A Minimum Day of 4 slots (includes "1 + ½ = two slots") plus a habit outside the minimum.
+ * Fake data: never real drugs or personal data, the repo may be public.
  */
 fun sampleMinimumDay(): List<Habit> = listOf(
     aMedication {
