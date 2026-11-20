@@ -40,6 +40,18 @@ gradlePlugin {
             id = libs.plugins.floorday.kmp.library.get().pluginId
             implementationClass = "studio.mialdea.floorday.buildlogic.KmpLibraryConventionPlugin"
         }
+        register("floordayKmpCompose") {
+            id = libs.plugins.floorday.kmp.compose.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.KmpComposeConventionPlugin"
+        }
+        register("floordayKmpFeature") {
+            id = libs.plugins.floorday.kmp.feature.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.KmpFeatureConventionPlugin"
+        }
+        register("floordayRoom") {
+            id = libs.plugins.floorday.room.get().pluginId
+            implementationClass = "studio.mialdea.floorday.buildlogic.RoomConventionPlugin"
+        }
         register("floordayQuality") {
             id = libs.plugins.floorday.quality.get().pluginId
             implementationClass = "studio.mialdea.floorday.buildlogic.QualityConventionPlugin"
