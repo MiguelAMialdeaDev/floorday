@@ -43,7 +43,8 @@ class RoomConventionPlugin : Plugin<Project> {
                 }
 
                 sourceSets.getByName("commonMain").dependencies {
-                    implementation(catalog.library("room3-runtime"))
+                    // api: the database class and DataPlatform expose Room types to the DI module.
+                    api(catalog.library("room3-runtime"))
                     implementation(catalog.library("sqlite-bundled"))
                 }
 
