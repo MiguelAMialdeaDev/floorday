@@ -5,7 +5,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 
-/** Common modules. Empty in S0; the data and Today PRs add their own. */
+/** Common modules. dataModule(platform) arrives through platformModules because it needs the platform. */
 internal val sharedModules: List<Module> = emptyList()
 
 /**
