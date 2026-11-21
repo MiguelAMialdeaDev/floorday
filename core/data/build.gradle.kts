@@ -7,6 +7,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:domain"))
+            // api: DataPlatform exposes Storage<Preferences> to the platform implementations.
+            api(libs.datastore.preferences.core)
         }
     }
 }
