@@ -1,0 +1,19 @@
+name: setup
+description: JDK 21 Temurin, Android platform 37 and Gradle with a read-only cache outside main
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+      with:
+        distribution: temurin
+        java-version: '21'
+    - name: Android platform 37 (compileSdk)
+      shell: bash
+      run: |
+        yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+        "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" > /dev/null
+    - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1 # zizmor: ignore[cache-poisoning] only main writes the cache; PRs read it
+      with:
+        cache-provider: basic
+        validate-wrappers: true
+        add-job-summary: on-failure
