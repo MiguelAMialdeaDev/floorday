@@ -96,7 +96,7 @@ jobs:
         run: ./gradlew :androidApp:assembleDebug :androidApp:lintDebug :androidApp:assembleRelease
       - name: No INTERNET permission in the release APK
         run: |
-          aapt2="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)aapt2"
+          aapt2="$(find "$ANDROID_HOME/build-tools" -mindepth 2 -maxdepth 2 -name aapt2 | sort -V | tail -1)"
           if "$aapt2" dump permissions androidApp/build/outputs/apk/release/*.apk | grep -q 'android.permission.INTERNET'; then
             echo "::error::The release APK requests INTERNET"; exit 1
           fi
