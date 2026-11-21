@@ -1,6 +1,6 @@
-// floorday.room is applied in the Room 3 PR.
+// floorday.room brings floorday.kmp.library, KSP per target, Room 3 and sqlite-bundled.
 plugins {
-    id("floorday.kmp.library")
+    id("floorday.room")
 }
 
 kotlin {

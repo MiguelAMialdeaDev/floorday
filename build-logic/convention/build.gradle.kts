@@ -20,6 +20,8 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room3.gradlePlugin)
 
     // No version: kotlin-dsl aligns it with the Kotlin embedded in Gradle.
     testImplementation(kotlin("test-junit"))
