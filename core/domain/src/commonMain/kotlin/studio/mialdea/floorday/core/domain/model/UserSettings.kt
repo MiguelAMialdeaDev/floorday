@@ -5,7 +5,7 @@ import studio.mialdea.floorday.core.domain.time.DayStart
 
 enum class WeightUnit { KG, LB, ST }
 
-/** User settings (DataStore "settings"). They travel in the backup. */
+/** User settings (DataStore "user_settings"). They travel in the backup. */
 data class UserSettings(
     val onboardingDone: Boolean = false,
     val dayStartMinutes: Int = DEFAULT_DAY_START_MINUTES,
