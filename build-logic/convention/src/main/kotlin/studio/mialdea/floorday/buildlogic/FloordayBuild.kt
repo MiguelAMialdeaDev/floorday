@@ -9,6 +9,15 @@ object FloordayBuild {
     /** JDK that compiles and runs the tests. Robolectric 4.18 requires 21 with SDK 36 or higher. */
     const val JDK_TOOLCHAIN = 21
 
+    /**
+     * Modules with an extra `jvm()` target used only by tests: database tests need the bundled
+     * SQLite natives of the host JVM, and the modules they depend on must publish a JVM variant
+     * too. There is no production JVM code.
+     */
+    private val JVM_TEST_MODULES: Set<String> = setOf(":core:domain", ":core:data", ":core:testing")
+
+    fun hasJvmTestTarget(projectPath: String): Boolean = projectPath in JVM_TEST_MODULES
+
     /** Maximum versionCode accepted by Google Play. */
     private const val MAX_VERSION_CODE = 2_100_000_000
 

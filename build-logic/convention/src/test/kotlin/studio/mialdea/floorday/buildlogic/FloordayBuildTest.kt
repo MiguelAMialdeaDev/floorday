@@ -31,4 +31,10 @@ class FloordayBuildTest {
 
     @Test fun versionCodeIsCappedAtPlayLimit() =
         assertEquals(2_100_000_000, FloordayBuild.versionCodeFrom("2100000001"))
+
+    @Test fun jvmTestTargetOnlyInCoreDataAndItsDependencies() = assertEquals(
+        listOf(true, true, true, false, false),
+        listOf(":core:domain", ":core:data", ":core:testing", ":core:designsystem", ":feature:today")
+            .map(FloordayBuild::hasJvmTestTarget),
+    )
 }
