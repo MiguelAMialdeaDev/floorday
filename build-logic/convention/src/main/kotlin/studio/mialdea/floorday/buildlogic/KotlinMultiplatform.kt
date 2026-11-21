@@ -19,6 +19,12 @@ internal fun Project.configureKotlinMultiplatform() {
         iosArm64()
         iosSimulatorArm64()
 
+        if (FloordayBuild.hasJvmTestTarget(path)) {
+            jvm {
+                compilerOptions.jvmTarget.set(JvmTarget.fromTarget(catalog.stringVersion("jvmTarget")))
+            }
+        }
+
         // The Android target is the same object as the `kotlin { android {} }` block.
         targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
             namespace = moduleNamespace
