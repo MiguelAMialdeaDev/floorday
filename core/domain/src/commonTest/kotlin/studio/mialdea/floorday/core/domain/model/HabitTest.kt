@@ -188,4 +188,45 @@ class HabitTest {
             vitaminD().record(foreign, monday, CompletionStatus.DONE, t0, EntrySource.APP)
         }
     }
+
+    // Removed slots
+
+    @Test
+    fun `los momentos retirados no cuentan para el maximo`() {
+        val removed = slot(id = slotIdFor(99), removedOn = monday)
+        val current = List(Habit.MAX_SLOTS) { i -> slot(id = slotIdFor(i)) }
+
+        val habit = habit(slots = current + removed)
+
+        assertEquals(Habit.MAX_SLOTS, habit.currentSlots.size)
+        assertEquals(Habit.MAX_SLOTS + 1, habit.slots.size)
+    }
+
+    @Test
+    fun `un habito necesita al menos un momento vigente`() {
+        assertFailsWith<IllegalArgumentException> {
+            habit(slots = listOf(slot(removedOn = monday)))
+        }
+    }
+
+    @Test
+    fun `slotsOn devuelve los momentos que existian ese dia`() {
+        val tuesday = LocalDate(2026, 11, 24)
+        val morning = slot(id = morningSlotId, removedOn = tuesday)
+        val night = slot(id = nightSlotId, label = "Noche", addedOn = tuesday)
+        val habit = habit(slots = listOf(morning, night))
+
+        assertEquals(listOf(morning), habit.slotsOn(monday))
+        assertEquals(listOf(night), habit.slotsOn(tuesday))
+        assertEquals(listOf(night), habit.currentSlots)
+    }
+
+    @Test
+    fun `se puede registrar un momento retirado para corregir un dia pasado`() {
+        val habit = habit(slots = listOf(slot(id = morningSlotId, removedOn = monday), slot(id = nightSlotId)))
+
+        val completion = habit.record(morningSlotId, LocalDate(2026, 11, 20), CompletionStatus.DONE, t0, EntrySource.APP)
+
+        assertEquals(morningSlotId, completion.slotId)
+    }
 }

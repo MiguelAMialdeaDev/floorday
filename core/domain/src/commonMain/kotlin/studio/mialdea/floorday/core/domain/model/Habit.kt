@@ -6,7 +6,8 @@ import kotlinx.datetime.LocalDate
 /**
  * A user habit. Medication is a habit with kind = MEDICATION, several
  * slots and an amount in quarters. The order of [slots] is the one the user sees and it is
- * persisted (position column).
+ * persisted (position column). It holds every slot ever, removed ones included so they keep
+ * their history; [currentSlots] are the ones still in use.
  *
  * Timestamps are set by the use case with the injected Clock; the model never reads
  * the system time.
@@ -32,8 +33,8 @@ data class Habit(
         require(name.length <= NAME_MAX_LENGTH) {
             "El nombre del hábito admite $NAME_MAX_LENGTH caracteres como máximo"
         }
-        require(slots.isNotEmpty()) { "Un hábito necesita al menos un momento" }
-        require(slots.size <= MAX_SLOTS) { "Un hábito admite $MAX_SLOTS momentos como máximo" }
+        require(currentSlots.isNotEmpty()) { "Un hábito necesita al menos un momento vigente" }
+        require(currentSlots.size <= MAX_SLOTS) { "Un hábito admite $MAX_SLOTS momentos vigentes como máximo" }
         require(slots.map { it.id }.toSet().size == slots.size) { "Hay momentos con el id repetido" }
         require(slots.all { it.habitId == id }) { "Todos los momentos deben pertenecer al hábito $id" }
         require(!days.isEmpty) { "Un hábito necesita al menos un día de la semana" }
@@ -67,6 +68,12 @@ data class Habit(
     val isMedication: Boolean get() = kind == HabitKind.MEDICATION
 
     fun slot(id: SlotId): HabitSlot? = slots.firstOrNull { it.id == id }
+
+    /** Slots not removed, in the user order. */
+    val currentSlots: List<HabitSlot> get() = slots.filter { it.isCurrent }
+
+    /** Slots that existed on that logical day, so a later edit never rewrites a past day. */
+    fun slotsOn(day: LocalDate): List<HabitSlot> = slots.filter { it.isActiveOn(day) }
 
     /** The habit is due on that logical day: active weekday and not archived yet. */
     fun isScheduledOn(day: LocalDate): Boolean =

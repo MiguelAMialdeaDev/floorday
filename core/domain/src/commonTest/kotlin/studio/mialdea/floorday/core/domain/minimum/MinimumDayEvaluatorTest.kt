@@ -202,6 +202,38 @@ class MinimumDayEvaluatorTest {
         assertEquals(DayOfWeek.SUNDAY, day.dayOfWeek)
         assertEquals(MinimumDayOutcome.REST, result.outcome)
     }
+
+    @Test
+    fun `retirar un momento no cambia los dias anteriores`() {
+        val thursday = LocalDate(2026, 12, 17)
+        val pill = aMedication {
+            slot { label = "Mañana" }
+            slot { label = "Noche"; removedOn = thursday }
+        }
+
+        val before = evaluate(listOf(pill.mark(wednesday, 0), pill.mark(wednesday, 1)), listOf(pill), wednesday)
+        val after = evaluate(listOf(pill.mark(thursday, 0)), listOf(pill), thursday)
+
+        assertEquals(2, before.required)
+        assertTrue(before.isMet)
+        assertEquals(1, after.required)
+        assertTrue(after.isMet)
+    }
+
+    @Test
+    fun `un momento nuevo no cuenta antes de addedOn`() {
+        val thursday = LocalDate(2026, 12, 17)
+        val pill = aMedication {
+            slot { label = "Mañana" }
+            slot { label = "Noche"; addedOn = thursday }
+        }
+
+        val before = evaluate(listOf(pill.mark(wednesday, 0)), listOf(pill), wednesday)
+
+        assertEquals(1, before.required)
+        assertTrue(before.isMet)
+        assertEquals(2, evaluate(emptyList(), listOf(pill), thursday).required)
+    }
 }
 
 class MinimumSizeTest {
