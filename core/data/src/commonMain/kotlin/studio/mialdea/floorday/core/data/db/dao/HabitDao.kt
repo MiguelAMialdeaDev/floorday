@@ -31,12 +31,16 @@ interface HabitDao {
     @Upsert
     suspend fun upsertSlots(slots: List<HabitSlotEntity>)
 
-    /** `keep` is never empty: a Habit always has at least one slot. */
+    /** `keep` is never empty. A slot with records makes the RESTRICT FK fail and the transaction roll back. */
     @Query("DELETE FROM habit_slot WHERE habit_id = :habitId AND id NOT IN (:keep)")
     suspend fun deleteSlotsNotIn(habitId: Uuid, keep: List<Uuid>)
 
     @Query("UPDATE habit SET archived_on = :day WHERE id = :id")
     suspend fun setArchivedOn(id: Uuid, day: LocalDate?)
+
+    /** Records first: the RESTRICT FK of completion would block the CASCADE from habit to slot. */
+    @Query("DELETE FROM completion WHERE slot_id IN (SELECT id FROM habit_slot WHERE habit_id = :habitId)")
+    suspend fun deleteCompletionsOf(habitId: Uuid)
 
     @Query("DELETE FROM habit WHERE id = :id")
     suspend fun delete(id: Uuid)

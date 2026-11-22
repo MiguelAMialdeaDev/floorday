@@ -6,6 +6,7 @@ import androidx.room3.ForeignKey
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
 import kotlin.uuid.Uuid
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import studio.mialdea.floorday.core.domain.model.ReminderMode
 
@@ -31,4 +32,7 @@ data class HabitSlotEntity(
     /** Quarters: 4 = 1, 2 = ½. */
     @ColumnInfo(name = "amount_quarters") val amountQuarters: Int,
     @ColumnInfo(name = "reminder") val reminder: ReminderMode,
+    @ColumnInfo(name = "added_on") val addedOn: LocalDate?,
+    /** The slot is ended, never deleted while it has records (RESTRICT FK in completion). */
+    @ColumnInfo(name = "removed_on") val removedOn: LocalDate?,
 )

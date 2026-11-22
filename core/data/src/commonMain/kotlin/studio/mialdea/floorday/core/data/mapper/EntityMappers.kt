@@ -33,6 +33,8 @@ internal fun HabitSlotEntity.toDomain(): HabitSlot = HabitSlot(
     time = time,
     amount = Quarters(amountQuarters),
     reminder = reminder,
+    addedOn = addedOn,
+    removedOn = removedOn,
 )
 
 internal fun Habit.toEntity(): HabitEntity = HabitEntity(
@@ -58,6 +60,8 @@ internal fun Habit.slotEntities(): List<HabitSlotEntity> = slots.mapIndexed { po
         time = slot.time,
         amountQuarters = slot.amount.value,
         reminder = slot.reminder,
+        addedOn = slot.addedOn,
+        removedOn = slot.removedOn,
     )
 }
 
