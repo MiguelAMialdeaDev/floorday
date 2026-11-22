@@ -3,7 +3,17 @@ package studio.mialdea.floorday.core.domain.model
 import kotlinx.datetime.LocalTime
 import studio.mialdea.floorday.core.domain.time.DayStart
 
-enum class WeightUnit { KG, LB, ST }
+/** [key] is stored in DataStore ("user_settings"): never change an existing one. */
+enum class WeightUnit(val key: String) {
+    KG("kg"),
+    LB("lb"),
+    ST("st"),
+    ;
+
+    companion object {
+        fun fromKey(key: String): WeightUnit? = entries.firstOrNull { it.key == key }
+    }
+}
 
 /** User settings (DataStore "user_settings"). They travel in the backup. */
 data class UserSettings(
