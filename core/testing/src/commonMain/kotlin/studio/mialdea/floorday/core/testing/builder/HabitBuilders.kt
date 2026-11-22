@@ -32,6 +32,8 @@ class HabitSlotBuilder internal constructor() {
     var time: LocalTime? = null
     var amount: Quarters = Quarters.ONE
     var reminder: ReminderMode = ReminderMode.NONE
+    var addedOn: LocalDate? = null
+    var removedOn: LocalDate? = null
 
     internal fun build(habitId: HabitId): HabitSlot = HabitSlot(
         id = id,
@@ -40,6 +42,8 @@ class HabitSlotBuilder internal constructor() {
         time = time,
         amount = amount,
         reminder = reminder,
+        addedOn = addedOn,
+        removedOn = removedOn,
     )
 }
 

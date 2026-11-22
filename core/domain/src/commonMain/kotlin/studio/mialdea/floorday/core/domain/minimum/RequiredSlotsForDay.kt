@@ -10,7 +10,8 @@ import studio.mialdea.floorday.core.domain.model.SlotId
  *
  * - Habits with `countsForMinimumOn(day)` count: `minimumSince <= day`, the weekday is
  *   active and not archived that day (archiving is inclusive).
- * - Each slot is one required item: a 1 + ½ medication is two.
+ * - Each slot that existed that day is one required item: a 1 + ½ medication is two. A slot
+ *   added later or removed earlier does not change past days.
  * - A dose skipped on purpose (SKIPPED on a kind that allows it) leaves the required set: it is neutral.
  * - SKIPPED on a CHECK does not exist in the product; if it arrives, it is ignored and the slot stays pending.
  */
@@ -26,7 +27,7 @@ object RequiredSlotsForDay {
         val required = mutableSetOf<SlotId>()
         val skipped = mutableSetOf<SlotId>()
         habits.filter { it.countsForMinimumOn(day) }.forEach { habit ->
-            habit.slots.forEach { slot ->
+            habit.slotsOn(day).forEach { slot ->
                 val isNeutral = habit.kind.allowsSkip && statusBySlot[slot.id]?.excusesSlot == true
                 if (isNeutral) skipped += slot.id else required += slot.id
             }

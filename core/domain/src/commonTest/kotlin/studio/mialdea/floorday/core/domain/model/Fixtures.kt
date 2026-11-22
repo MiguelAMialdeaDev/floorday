@@ -25,7 +25,9 @@ internal object Fixtures {
         time: LocalTime? = LocalTime(8, 0),
         amount: Quarters = Quarters.ONE,
         reminder: ReminderMode = ReminderMode.NONE,
-    ) = HabitSlot(id, habitId, label, time, amount, reminder)
+        addedOn: LocalDate? = null,
+        removedOn: LocalDate? = null,
+    ) = HabitSlot(id, habitId, label, time, amount, reminder, addedOn, removedOn)
 
     fun habit(
         kind: HabitKind = HabitKind.CHECK,
