@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="check_state_pending">pendiente</string>
+    <string name="check_state_done">hecho</string>
+    <string name="check_state_done_at">hecho a las %1$s</string>
+    <string name="check_state_skipped">omitida a propósito</string>
+    <string name="check_action_mark">marcar como hecho</string>
+    <string name="check_action_undo">deshacer</string>
+    <string name="check_done_label">Hecho</string>
+    <string name="check_part_of_minimum">parte del mínimo</string>
+    <string name="ring_of">de %1$d</string>
+    <string name="ring_of_compact">/%1$d</string>
+    <string name="ring_minimum_met">Mínimo cumplido</string>
+    <string name="ring_content_description">Día Mínimo: %1$d de %2$d hechos</string>
+</resources>
