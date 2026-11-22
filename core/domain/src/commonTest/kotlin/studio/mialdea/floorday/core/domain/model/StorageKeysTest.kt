@@ -36,6 +36,13 @@ class StorageKeysTest {
     }
 
     @Test
+    fun `claves de WeightUnit`() {
+        assertEquals(listOf("kg", "lb", "st"), WeightUnit.entries.map { it.key })
+        WeightUnit.entries.forEach { assertEquals(it, WeightUnit.fromKey(it.key)) }
+        assertNull(WeightUnit.fromKey("KG"))
+    }
+
+    @Test
     fun `capacidades de cada tipo y hora obligatoria por recordatorio`() {
         assertEquals(listOf(false, false, false, false), HabitKind.CHECK.capabilities())
         assertEquals(listOf(true, true, true, true), HabitKind.MEDICATION.capabilities())
