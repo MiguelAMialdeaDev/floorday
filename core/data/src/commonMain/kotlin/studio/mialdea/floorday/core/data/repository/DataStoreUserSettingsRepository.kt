@@ -40,7 +40,7 @@ class DataStoreUserSettingsRepository(
         val INSIST_MAX_RETRIES = intPreferencesKey("insist_max_retries")
         val SHOW_NAME_ON_LOCK_SCREEN = booleanPreferencesKey("show_name_on_lock_screen")
 
-        /** Lowercase name ("kg", "lb", "st"); unknown values fall back to the locale. */
+        /** WeightUnit.key ("kg", "lb", "st"); an unknown value falls back to the locale. */
         val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
         val HAPTICS = booleanPreferencesKey("haptics")
     }
@@ -56,9 +56,7 @@ class DataStoreUserSettingsRepository(
             insistIntervalMin = this[Keys.INSIST_INTERVAL_MIN] ?: defaults.insistIntervalMin,
             insistMaxRetries = this[Keys.INSIST_MAX_RETRIES] ?: defaults.insistMaxRetries,
             showNameOnLockScreen = this[Keys.SHOW_NAME_ON_LOCK_SCREEN] ?: defaults.showNameOnLockScreen,
-            weightUnit = this[Keys.WEIGHT_UNIT]?.let { stored ->
-                WeightUnit.entries.firstOrNull { it.name.lowercase() == stored }
-            },
+            weightUnit = this[Keys.WEIGHT_UNIT]?.let(WeightUnit::fromKey),
             haptics = this[Keys.HAPTICS] ?: defaults.haptics,
         ).sanitized()
     }
@@ -70,7 +68,7 @@ class DataStoreUserSettingsRepository(
         this[Keys.INSIST_INTERVAL_MIN] = settings.insistIntervalMin
         this[Keys.INSIST_MAX_RETRIES] = settings.insistMaxRetries
         this[Keys.SHOW_NAME_ON_LOCK_SCREEN] = settings.showNameOnLockScreen
-        setOrRemove(Keys.WEIGHT_UNIT, settings.weightUnit?.name?.lowercase())
+        setOrRemove(Keys.WEIGHT_UNIT, settings.weightUnit?.key)
         this[Keys.HAPTICS] = settings.haptics
     }
 
