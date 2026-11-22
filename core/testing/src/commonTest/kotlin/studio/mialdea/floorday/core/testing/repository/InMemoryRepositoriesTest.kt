@@ -56,15 +56,16 @@ class InMemoryRepositoriesTest {
     }
 
     @Test
-    fun `guardar sin un momento borra las marcas de ese momento`() = runTest {
+    fun `guardar sin un momento con marcas falla como la FK de Room`() = runTest {
         val habit = aHabit { slot { label = "Mañana" }; slot { label = "Noche" } }
         val (morning, night) = habit.slots
         habits.seed(habit)
         completions.seed(aCompletion(morning, day), aCompletion(night, day))
 
-        habits.save(habit.copy(slots = listOf(morning)))
+        val error = assertFailsWith<IllegalStateException> { habits.save(habit.copy(slots = listOf(morning))) }
 
-        assertEquals(listOf(morning.id), completions.observeDay(day).first().map { it.slotId })
+        assertTrue("removedOn" in error.message.orEmpty())
+        assertEquals(setOf(morning.id, night.id), completions.observeDay(day).first().map { it.slotId }.toSet())
     }
 
     @Test

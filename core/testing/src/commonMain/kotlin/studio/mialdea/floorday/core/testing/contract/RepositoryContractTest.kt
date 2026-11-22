@@ -10,7 +10,9 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.plus
 import studio.mialdea.floorday.core.domain.model.CompletionStatus
 import studio.mialdea.floorday.core.domain.model.Habit
 import studio.mialdea.floorday.core.domain.model.Quarters
@@ -56,7 +58,8 @@ abstract class RepositoryContractTest {
             updatedAt = FakeClock.DEFAULT_START + 2.hours
             slot { label = "Noche"; time = LocalTime(22, 0); amount = Quarters.HALF; reminder = ReminderMode.INSISTENT }
             slot { label = "Mañana"; time = LocalTime(8, 0); amount = Quarters.ONE; reminder = ReminderMode.INSISTENT }
-            slot { label = "Cuando sea"; amount = Quarters(6) }
+            slot { label = "Cuando sea"; amount = Quarters(6); addedOn = TestDates.BASELINE }
+            slot { label = "Antes"; removedOn = TestDates.BASELINE }
         }
 
         habits.save(habit)
@@ -117,17 +120,42 @@ abstract class RepositoryContractTest {
     }
 
     @Test
-    fun `guardar sin un momento borra solo las marcas de ese momento`() = runTest {
+    fun `retirar un momento conserva el momento y sus marcas`() = runTest {
         val habit = aHabit { slot { label = "Mañana" }; slot { label = "Noche" } }
         val (morning, night) = habit.slots
         habits.save(habit)
         completions.upsert(aCompletion(morning, day))
         completions.upsert(aCompletion(night, day))
+        val ended = habit.copy(slots = listOf(morning, night.copy(removedOn = day.plus(1, DateTimeUnit.DAY))))
 
-        habits.save(habit.copy(name = "Beber más agua", slots = listOf(morning)))
+        habits.save(ended)
+
+        assertEquals(ended, habits.getHabit(habit.id))
+        assertEquals(setOf(morning.id, night.id), completions.observeDay(day).first().map { it.slotId }.toSet())
+    }
+
+    @Test
+    fun `quitar de la lista un momento sin marcas lo borra`() = runTest {
+        val habit = aHabit { slot { label = "Mañana" }; slot { label = "Noche" } }
+        val morning = habit.slots.first()
+        habits.save(habit)
+
+        habits.save(habit.copy(slots = listOf(morning)))
 
         assertEquals(listOf(morning), habits.getHabit(habit.id)?.slots)
-        assertEquals(listOf(morning.id), completions.observeDay(day).first().map { it.slotId })
+    }
+
+    @Test
+    fun `quitar de la lista un momento con marcas falla y no guarda nada`() = runTest {
+        val habit = aHabit { slot { label = "Mañana" }; slot { label = "Noche" } }
+        val (morning, night) = habit.slots
+        habits.save(habit)
+        completions.upsert(aCompletion(night, day))
+
+        assertFails { habits.save(habit.copy(name = "Beber más agua", slots = listOf(morning))) }
+
+        assertEquals(habit, habits.getHabit(habit.id))
+        assertEquals(listOf(night.id), completions.observeDay(day).first().map { it.slotId })
     }
 
     @Test
