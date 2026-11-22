@@ -26,7 +26,7 @@ class RoomHabitRepository(private val database: FloordayDatabase) : HabitReposit
 
     override suspend fun save(habit: Habit) {
         // Habit already requires one slot; this guards the DELETE below, which with an empty list
-        // would remove every slot and, through the CASCADE, the whole history.
+        // would try to drop every slot. A dropped slot with records fails (RESTRICT) and rolls back.
         require(habit.slots.isNotEmpty()) { "A habit needs at least one slot" }
         database.withWriteTransaction {
             dao.upsertHabit(habit.toEntity())
@@ -40,7 +40,10 @@ class RoomHabitRepository(private val database: FloordayDatabase) : HabitReposit
     }
 
     override suspend fun delete(id: HabitId) {
-        dao.delete(id.value)
+        database.withWriteTransaction {
+            dao.deleteCompletionsOf(id.value)
+            dao.delete(id.value)
+        }
     }
 
     override suspend fun nextSortOrder(): Int = dao.nextSortOrder()

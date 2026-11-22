@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a4b0994aeb150602cf837746204a92a3",
+    "identityHash": "620c1c03b161ef2284dc4f94eec7ad88",
     "entities": [
       {
         "tableName": "habit",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "habit_slot",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `habit_id` TEXT NOT NULL, `position` INTEGER NOT NULL, `label` TEXT NOT NULL, `time_minutes` INTEGER, `amount_quarters` INTEGER NOT NULL, `reminder` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`habit_id`) REFERENCES `habit`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `habit_id` TEXT NOT NULL, `position` INTEGER NOT NULL, `label` TEXT NOT NULL, `time_minutes` INTEGER, `amount_quarters` INTEGER NOT NULL, `reminder` TEXT NOT NULL, `added_on` TEXT, `removed_on` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`habit_id`) REFERENCES `habit`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -128,6 +128,16 @@
             "columnName": "reminder",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "addedOn",
+            "columnName": "added_on",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "removedOn",
+            "columnName": "removed_on",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -163,7 +173,7 @@
       },
       {
         "tableName": "completion",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`slot_id` TEXT NOT NULL, `day` TEXT NOT NULL, `status` TEXT NOT NULL, `recorded_at` INTEGER NOT NULL, `amount_quarters` INTEGER NOT NULL, `source` TEXT NOT NULL, PRIMARY KEY(`slot_id`, `day`), FOREIGN KEY(`slot_id`) REFERENCES `habit_slot`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`slot_id` TEXT NOT NULL, `day` TEXT NOT NULL, `status` TEXT NOT NULL, `recorded_at` INTEGER NOT NULL, `amount_quarters` INTEGER NOT NULL, `source` TEXT NOT NULL, PRIMARY KEY(`slot_id`, `day`), FOREIGN KEY(`slot_id`) REFERENCES `habit_slot`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "slotId",
@@ -232,7 +242,7 @@
         "foreignKeys": [
           {
             "table": "habit_slot",
-            "onDelete": "CASCADE",
+            "onDelete": "RESTRICT",
             "onUpdate": "NO ACTION",
             "columns": [
               "slot_id"
@@ -246,7 +256,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a4b0994aeb150602cf837746204a92a3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '620c1c03b161ef2284dc4f94eec7ad88')"
     ]
   }
 }

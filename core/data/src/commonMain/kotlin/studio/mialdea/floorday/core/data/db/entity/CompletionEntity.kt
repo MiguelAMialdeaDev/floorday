@@ -10,7 +10,10 @@ import kotlinx.datetime.LocalDate
 import studio.mialdea.floorday.core.domain.model.CompletionStatus
 import studio.mialdea.floorday.core.domain.model.EntrySource
 
-/** One row per (slot, logical day). Undo deletes the row. */
+/**
+ * One row per (slot, logical day). Undo deletes the row. RESTRICT: history is never deleted by
+ * dropping a slot; only deleting the whole habit removes it (RoomHabitRepository.delete).
+ */
 @Entity(
     tableName = "completion",
     primaryKeys = ["slot_id", "day"],
@@ -19,7 +22,7 @@ import studio.mialdea.floorday.core.domain.model.EntrySource
             entity = HabitSlotEntity::class,
             parentColumns = ["id"],
             childColumns = ["slot_id"],
-            onDelete = ForeignKey.CASCADE,
+            onDelete = ForeignKey.RESTRICT,
         ),
     ],
     indices = [Index(value = ["slot_id"]), Index(value = ["day"])],
