@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="check_state_pending">pending</string>
+    <string name="check_state_done">done</string>
+    <string name="check_state_done_at">done at %1$s</string>
+    <string name="check_state_skipped">skipped on purpose</string>
+    <string name="check_action_mark">mark as done</string>
+    <string name="check_action_undo">undo</string>
+    <string name="check_done_label">Done</string>
+    <string name="check_part_of_minimum">part of the minimum</string>
+    <string name="ring_of">of %1$d</string>
+    <string name="ring_of_compact">/%1$d</string>
+    <string name="ring_minimum_met">Minimum met</string>
+    <string name="ring_content_description">Minimum day: %1$d of %2$d done</string>
+</resources>
