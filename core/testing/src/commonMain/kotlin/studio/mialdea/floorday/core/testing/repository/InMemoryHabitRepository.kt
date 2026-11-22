@@ -29,11 +29,14 @@ class InMemoryHabitRepository(
         require(habit.slots.isNotEmpty()) { "Un hábito necesita al menos un momento" }
         store.write { t ->
             val kept = habit.slots.map { it.id }.toSet()
-            val removed = t.habits[habit.id]?.slots.orEmpty().map { it.id }.filterNot { it in kept }.toSet()
-            t.copy(
-                habits = t.habits + (habit.id to habit),
-                completions = t.completions.filterKeys { it.slotId !in removed },
-            )
+            val dropped = t.habits[habit.id]?.slots.orEmpty().map { it.id }.filterNot { it in kept }.toSet()
+            // Same as the RESTRICT FK of Room: a slot with records is ended with removedOn, never dropped.
+            if (store.strictForeignKeys) {
+                check(t.completions.keys.none { it.slotId in dropped }) {
+                    "FK: un momento con marcas no se borra, se retira con removedOn"
+                }
+            }
+            t.copy(habits = t.habits + (habit.id to habit))
         }
     }
 
