@@ -19,7 +19,7 @@ Each ADR records one decision that is expensive to undo. It is written on the da
 | 0012 | License | Planned |
 | 0013 | minSdk 28 | Planned |
 | 0014 | Backup and restore | Planned |
-| 0015 | Visual identity | Planned (S1) |
+| [0015](0015-visual-identity.md) | Visual identity "Suelo Quieto" | Accepted |
 
 ## Template
 
