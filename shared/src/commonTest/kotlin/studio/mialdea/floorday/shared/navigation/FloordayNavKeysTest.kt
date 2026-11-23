@@ -13,7 +13,7 @@ class FloordayNavKeysTest {
 
     @Test
     fun everyTopLevelKeySurvivesPolymorphicRoundTrip() {
-        val keys: List<NavKey> = listOf(TodayKey, HistoryKey, SettingsKey)
+        val keys: List<NavKey> = listOf(TodayKey, HistoryKey, SettingsKey, HabitEditorKey(), HabitEditorKey("00000000-0000-0000-0000-000000000001"))
 
         keys.forEach { key ->
             val encoded = json.encodeToString(serializer, key)
