@@ -22,5 +22,5 @@ val todayFeatureModule = module {
     factory { SaveHabitUseCase(get(), get(), get(), IdGenerator.Random) }
     factoryOf(::DeleteHabitUseCase)
     // The habit id comes from the navigation key: koinViewModel { parametersOf(habitId) }, null = new.
-    viewModel { params -> HabitEditorViewModel(params.getOrNull(), get(), get(), get()) }
+    viewModel { params -> HabitEditorViewModel(params.getOrNull(), get(), get(), get(), get()) }
 }

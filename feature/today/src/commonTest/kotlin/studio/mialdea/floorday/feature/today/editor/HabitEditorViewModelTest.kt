@@ -37,6 +37,7 @@ class HabitEditorViewModelTest {
             habits = habits,
             saveHabit = SaveHabitUseCase(habits, FakeClock(), FakeLogicalDayProvider(LocalDate(2026, 12, 1)), IdGenerator.Random),
             deleteHabit = DeleteHabitUseCase(habits),
+            timeFormatter = { it.toString() },
         )
         advanceUntilIdle()
         return viewModel
@@ -89,6 +90,7 @@ class HabitEditorViewModelTest {
             habits = habits,
             saveHabit = SaveHabitUseCase(habits, FakeClock(), FakeLogicalDayProvider(LocalDate(2026, 12, 1)), IdGenerator.Random),
             deleteHabit = DeleteHabitUseCase(habits),
+            timeFormatter = { it.toString() },
         )
 
         viewModel.effects.test {
