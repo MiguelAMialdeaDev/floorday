@@ -6,6 +6,7 @@ import kotlin.uuid.Uuid
 import kotlinx.datetime.LocalDate
 import studio.mialdea.floorday.core.designsystem.component.CheckState
 import studio.mialdea.floorday.core.designsystem.theme.FloordayTheme
+import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.core.domain.model.SlotId
 import studio.mialdea.floorday.feature.today.DayPart
 import studio.mialdea.floorday.feature.today.TodayContent
@@ -17,7 +18,7 @@ import studio.mialdea.floorday.feature.today.TodayState
 // Generic sample texts on purpose: no real medication or names (the repo is public).
 
 private fun row(n: Int, title: String, supporting: String?, state: CheckState, doneTime: String? = null, minimum: Boolean = true) =
-    TodayRow(SlotId(Uuid.fromLongs(0L, n.toLong())), title, supporting, doneTime, state, minimum)
+    TodayRow(SlotId(Uuid.fromLongs(0L, n.toLong())), HabitId(Uuid.fromLongs(1L, n.toLong())), title, supporting, doneTime, state, minimum)
 
 private val sample = TodayContent(
     day = LocalDate(2026, 12, 1),
@@ -38,7 +39,7 @@ private val sample = TodayContent(
 
 @Composable
 private fun TodaySample(state: TodayState) {
-    TodayScreen(state = state, onIntent = {}, onOpenHistory = {}, onOpenSettings = {})
+    TodayScreen(state = state, onIntent = {}, onOpenHistory = {}, onOpenSettings = {}, onOpenEditor = {})
 }
 
 @Preview(name = "Hoy claro", widthDp = 360, heightDp = 900)

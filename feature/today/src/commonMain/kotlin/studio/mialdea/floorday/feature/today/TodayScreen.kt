@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,8 +37,11 @@ import studio.mialdea.floorday.core.designsystem.component.CheckRow
 import studio.mialdea.floorday.core.designsystem.component.ProgressRing
 import studio.mialdea.floorday.core.designsystem.theme.FloordayDimens
 import studio.mialdea.floorday.core.designsystem.theme.FloordayTheme
+import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.feature.today.resources.Res
 import studio.mialdea.floorday.feature.today.resources.today_collapsed
+import studio.mialdea.floorday.feature.today.resources.today_edit_habit
+import studio.mialdea.floorday.feature.today.resources.today_new_habit
 import studio.mialdea.floorday.feature.today.resources.today_empty_body
 import studio.mialdea.floorday.feature.today.resources.today_empty_title
 import studio.mialdea.floorday.feature.today.resources.today_expanded
@@ -58,6 +63,8 @@ internal fun TodayScreen(
     onIntent: (TodayIntent) -> Unit,
     onOpenHistory: () -> Unit,
     onOpenSettings: () -> Unit,
+    /** null = new habit. */
+    onOpenEditor: (HabitId?) -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -77,25 +84,33 @@ internal fun TodayScreen(
             when {
                 // Room answers in milliseconds: an empty frame is calmer than a flashing spinner.
                 state.isLoading || content == null -> Unit
-                !content.hasHabits -> item(key = "empty") { TodayEmpty() }
-                else -> todayContent(content, state.othersExpanded, onIntent)
+                !content.hasHabits -> item(key = "empty") { TodayEmpty(onCreate = { onOpenEditor(null) }) }
+                else -> {
+                    todayContent(content, state.othersExpanded, onIntent, onOpenEditor)
+                    item(key = "new") { NewHabitButton(onClick = { onOpenEditor(null) }) }
+                }
             }
         }
     }
 }
 
-private fun LazyListScope.todayContent(content: TodayContent, othersExpanded: Boolean, onIntent: (TodayIntent) -> Unit) {
+private fun LazyListScope.todayContent(
+    content: TodayContent,
+    othersExpanded: Boolean,
+    onIntent: (TodayIntent) -> Unit,
+    onOpenEditor: (HabitId?) -> Unit,
+) {
     item(key = "ring") { TodayRing(content) }
     content.sections.forEach { section ->
         item(key = "part-${section.part.name}") { PartTitle(section.part) }
-        items(section.rows, key = { "row-${it.slotId}" }) { row -> TodayCheck(row, onIntent) }
+        items(section.rows, key = { "row-${it.slotId}" }) { row -> TodayCheck(row, onIntent, onOpenEditor) }
     }
     if (content.others.isNotEmpty()) {
         item(key = "others") {
             OthersHeader(content.others.size, othersExpanded, onToggle = { onIntent(TodayIntent.ToggleOthers) })
         }
         if (othersExpanded) {
-            items(content.others, key = { "other-${it.slotId}" }) { row -> TodayCheck(row, onIntent) }
+            items(content.others, key = { "other-${it.slotId}" }) { row -> TodayCheck(row, onIntent, onOpenEditor) }
         }
     }
 }
@@ -148,7 +163,7 @@ private fun PartTitle(part: DayPart) {
 }
 
 @Composable
-private fun TodayCheck(row: TodayRow, onIntent: (TodayIntent) -> Unit) {
+private fun TodayCheck(row: TodayRow, onIntent: (TodayIntent) -> Unit, onOpenEditor: (HabitId?) -> Unit) {
     CheckRow(
         label = row.title,
         state = row.state,
@@ -156,7 +171,18 @@ private fun TodayCheck(row: TodayRow, onIntent: (TodayIntent) -> Unit) {
         supportingText = row.supportingText,
         doneTime = row.doneTime,
         partOfMinimum = row.partOfMinimum,
+        // For now a long press opens the editor straight away; the sheet with "Edit" and
+        // "Skipped on purpose" arrives with skipping (S1).
+        onLongClick = { onOpenEditor(row.habitId) },
+        longClickLabel = stringResource(Res.string.today_edit_habit),
     )
+}
+
+@Composable
+private fun NewHabitButton(onClick: () -> Unit) {
+    Box(Modifier.fillMaxWidth().padding(top = FloordayDimens.spaceXl), contentAlignment = Alignment.Center) {
+        OutlinedButton(onClick = onClick) { Text(stringResource(Res.string.today_new_habit)) }
+    }
 }
 
 @Composable
@@ -181,7 +207,7 @@ private fun OthersHeader(count: Int, expanded: Boolean, onToggle: () -> Unit) {
 }
 
 @Composable
-private fun TodayEmpty() {
+private fun TodayEmpty(onCreate: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(vertical = FloordayDimens.spaceXxxl),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -198,6 +224,9 @@ private fun TodayEmpty() {
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
         )
+        Button(onClick = onCreate, modifier = Modifier.padding(top = FloordayDimens.spaceL)) {
+            Text(stringResource(Res.string.today_new_habit))
+        }
     }
 }
 

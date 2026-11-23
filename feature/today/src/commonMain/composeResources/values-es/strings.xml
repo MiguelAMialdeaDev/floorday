@@ -17,6 +17,8 @@
     <string name="today_save_error">No se pudo guardar. Inténtalo de nuevo.</string>
     <string name="today_empty_title">Tu mínimo empieza aquí</string>
     <string name="today_empty_body">Tus hábitos aparecerán aquí cuando crees el primero.</string>
+    <string name="today_new_habit">Nuevo hábito</string>
+    <string name="today_edit_habit">Editar hábito</string>
 
     <string name="editor_title_new">Nuevo hábito</string>
     <string name="editor_title_edit">Editar hábito</string>

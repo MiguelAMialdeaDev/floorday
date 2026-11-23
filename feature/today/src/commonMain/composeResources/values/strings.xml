@@ -17,6 +17,8 @@
     <string name="today_save_error">Could not save. Please try again.</string>
     <string name="today_empty_title">Your minimum starts here</string>
     <string name="today_empty_body">Your habits will show up here once you create the first one.</string>
+    <string name="today_new_habit">New habit</string>
+    <string name="today_edit_habit">Edit habit</string>
 
     <string name="editor_title_new">New habit</string>
     <string name="editor_title_edit">Edit habit</string>

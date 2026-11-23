@@ -68,6 +68,7 @@ internal object TodayMapper {
             val done = completion?.takeIf { it.status == CompletionStatus.DONE }
             TodayRow(
                 slotId = slot.id,
+                habitId = habit.id,
                 title = habit.name,
                 supportingText = listOfNotNull(label, slot.time?.let(formatTime), amount).joinToString(SEPARATOR).ifEmpty { null },
                 doneTime = done?.recordedAt?.toLocalDateTime(zone)?.time?.let { formatTime(LocalTime(it.hour, it.minute)) },
