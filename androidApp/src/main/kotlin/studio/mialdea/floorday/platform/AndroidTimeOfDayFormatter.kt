@@ -11,8 +11,10 @@ import studio.mialdea.floorday.core.domain.platform.TimeOfDayFormatter
 class AndroidTimeOfDayFormatter(private val context: Context) : TimeOfDayFormatter {
     override fun format(time: LocalTime): String {
         val locale = Locale.getDefault()
-        val skeleton = if (DateFormat.is24HourFormat(context)) "Hm" else "hma"
+        val skeleton = if (is24Hour()) "Hm" else "hma"
         val pattern = DateFormat.getBestDateTimePattern(locale, skeleton)
         return java.time.LocalTime.of(time.hour, time.minute).format(DateTimeFormatter.ofPattern(pattern, locale))
     }
+
+    override fun is24Hour(): Boolean = DateFormat.is24HourFormat(context)
 }
