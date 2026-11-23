@@ -5,16 +5,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
-import studio.mialdea.floorday.core.domain.time.LogicalDayProvider
 import studio.mialdea.floorday.core.testing.builder.aCompletion
 import studio.mialdea.floorday.core.testing.builder.sampleMinimumDay
 import studio.mialdea.floorday.core.testing.repository.InMemoryCompletionRepository
 import studio.mialdea.floorday.core.testing.repository.InMemoryFloordayStore
 import studio.mialdea.floorday.core.testing.repository.InMemoryHabitRepository
+import studio.mialdea.floorday.core.testing.time.FakeLogicalDayProvider
 
 class ObserveTodayUseCaseTest {
 
@@ -56,11 +54,5 @@ class ObserveTodayUseCaseTest {
             assertEquals(0, tomorrow.minimum.done)
             assertNull(tomorrow.entries[0].completion)
         }
-    }
-
-    private class FakeLogicalDayProvider(start: LocalDate) : LogicalDayProvider {
-        val current = MutableStateFlow(start)
-        override fun observe(): Flow<LocalDate> = current
-        override fun refresh() = Unit
     }
 }
