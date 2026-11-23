@@ -1,0 +1,16 @@
+{
+  "habits": [
+    {
+      "name": "Vitamina D",
+      "kind": "medication",
+      "unit": "pastilla",
+      "slots": [
+        { "label": "Mañana", "time": "08:00", "quarters": 4 },
+        { "label": "Noche", "time": "22:00", "quarters": 2 }
+      ]
+    },
+    { "name": "Beber agua", "slots": [{ "time": "09:00" }] },
+    { "name": "Caminar 10 minutos", "slots": [{ "time": "18:00" }] },
+    { "name": "Estirar", "minimum": false }
+  ]
+}

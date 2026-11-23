@@ -28,3 +28,6 @@ CLAUDE.local.md
 .claude/settings.local.json
 .claude/.state/
 .claude/agent-memory-local/
+
+# Debug seed with personal habits (format: androidApp/src/debug/seed.example.json)
+androidApp/src/debug/assets/seed.json
