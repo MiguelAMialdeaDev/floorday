@@ -26,4 +26,8 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
+    // Debug only: the seeder reads seed.json with JsonElement (no serialization plugin needed).
+    debugImplementation(libs.kotlinx.serialization.json)
+    // In-memory repositories, FakeClock and kotlin.test for the seeder tests.
+    testImplementation(project(":core:testing"))
 }
