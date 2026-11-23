@@ -3,9 +3,11 @@ package studio.mialdea.floorday.feature.today.editor
 import androidx.lifecycle.viewModelScope
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalTime
 import studio.mialdea.floorday.core.designsystem.mvi.MviViewModel
 import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.core.domain.model.SaveHabitResult
+import studio.mialdea.floorday.core.domain.platform.TimeOfDayFormatter
 import studio.mialdea.floorday.core.domain.repository.HabitRepository
 import studio.mialdea.floorday.core.domain.usecase.DeleteHabitUseCase
 import studio.mialdea.floorday.core.domain.usecase.SaveHabitUseCase
@@ -16,7 +18,14 @@ class HabitEditorViewModel(
     private val habits: HabitRepository,
     private val saveHabit: SaveHabitUseCase,
     private val deleteHabit: DeleteHabitUseCase,
+    private val timeFormatter: TimeOfDayFormatter,
 ) : MviViewModel<HabitEditorState, HabitEditorIntent, HabitEditorEffect>(HabitEditorState()) {
+
+    /** For the screen: slot times shown like the rest of the system. */
+    fun formatTime(time: LocalTime): String = timeFormatter.format(time)
+
+    /** For the time picker, so it matches [formatTime]. */
+    fun is24Hour(): Boolean = timeFormatter.is24Hour()
 
     init {
         viewModelScope.launch { load() }
