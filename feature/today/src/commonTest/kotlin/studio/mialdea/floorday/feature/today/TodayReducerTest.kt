@@ -8,6 +8,7 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import kotlinx.datetime.LocalDate
 import studio.mialdea.floorday.core.designsystem.component.CheckState
+import studio.mialdea.floorday.core.testing.builder.habitIdOf
 import studio.mialdea.floorday.core.testing.builder.slotIdOf
 
 class TodayReducerTest {
@@ -83,6 +84,7 @@ class TodayReducerTest {
 
     private fun row(n: Int, title: String, partOfMinimum: Boolean = true) = TodayRow(
         slotId = slotIdOf(n),
+        habitId = habitIdOf(n),
         title = title,
         supportingText = null,
         doneTime = null,

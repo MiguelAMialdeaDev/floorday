@@ -21,6 +21,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.koin.compose.viewmodel.koinViewModel
 import studio.mialdea.floorday.core.designsystem.mvi.CollectEffects
+import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.feature.today.resources.Res
 import studio.mialdea.floorday.feature.today.resources.today_save_error
 import studio.mialdea.floorday.feature.today.resources.today_undo_action
@@ -34,6 +35,8 @@ private const val UNDO_TIMEOUT_MS = 5_000L
 fun TodayRoute(
     onOpenHistory: () -> Unit,
     onOpenSettings: () -> Unit,
+    /** null = new habit. */
+    onOpenEditor: (HabitId?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TodayViewModel = koinViewModel(),
 ) {
@@ -96,6 +99,7 @@ fun TodayRoute(
         onIntent = viewModel::onIntent,
         onOpenHistory = onOpenHistory,
         onOpenSettings = onOpenSettings,
+        onOpenEditor = onOpenEditor,
         modifier = modifier,
         snackbarHostState = snackbarHostState,
     )

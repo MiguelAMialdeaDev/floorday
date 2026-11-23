@@ -3,6 +3,7 @@ package studio.mialdea.floorday.feature.today
 import kotlinx.datetime.LocalDate
 import studio.mialdea.floorday.core.designsystem.component.CheckState
 import studio.mialdea.floorday.core.domain.model.Completion
+import studio.mialdea.floorday.core.domain.model.HabitId
 import studio.mialdea.floorday.core.domain.model.SlotId
 
 enum class DayPart { MORNING, AFTERNOON, NIGHT, ANYTIME }
@@ -10,6 +11,8 @@ enum class DayPart { MORNING, AFTERNOON, NIGHT, ANYTIME }
 /** A row as the screen draws it: texts already formatted, no domain objects. */
 data class TodayRow(
     val slotId: SlotId,
+    /** Habit the slot belongs to: a long press opens its editor. */
+    val habitId: HabitId,
     val title: String,
     /** Slot label (only if the habit has several), time and amount, joined with " · ". */
     val supportingText: String?,
