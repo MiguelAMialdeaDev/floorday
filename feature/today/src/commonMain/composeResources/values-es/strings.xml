@@ -1,6 +1,20 @@
 <resources>
     <string name="today_title">Hoy</string>
-    <string name="today_hello">Aquí empieza tu día mínimo.</string>
     <string name="today_open_history">Historial</string>
     <string name="today_open_settings">Ajustes</string>
+    <string name="today_progress">%1$d de %2$d</string>
+    <string name="today_rest_day">Hoy no toca nada de tu mínimo. Día libre.</string>
+    <string name="today_part_morning">Mañana</string>
+    <string name="today_part_afternoon">Tarde</string>
+    <string name="today_part_night">Noche</string>
+    <string name="today_part_anytime">En cualquier momento</string>
+    <string name="today_others">Otros hábitos (%1$d)</string>
+    <string name="today_expanded">Desplegado</string>
+    <string name="today_collapsed">Plegado</string>
+    <string name="today_undo_marked">Marcado: %1$s</string>
+    <string name="today_undo_unmarked">Desmarcado: %1$s</string>
+    <string name="today_undo_action">Deshacer</string>
+    <string name="today_save_error">No se pudo guardar. Inténtalo de nuevo.</string>
+    <string name="today_empty_title">Tu mínimo empieza aquí</string>
+    <string name="today_empty_body">Tus hábitos aparecerán aquí cuando crees el primero.</string>
 </resources>
