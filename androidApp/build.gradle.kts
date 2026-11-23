@@ -18,6 +18,8 @@ dependencies {
     implementation(project(":shared"))
     // AndroidDataPlatform (androidMain of :core:data) is built here, where the Context lives.
     implementation(project(":core:data"))
+    // androidPlatformModule implements the :core:domain/platform interfaces.
+    implementation(project(":core:domain"))
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
