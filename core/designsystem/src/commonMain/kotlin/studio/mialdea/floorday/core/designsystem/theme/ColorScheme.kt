@@ -118,7 +118,7 @@ data class FloordayColors(
     val pressedLayer: Color,
     /** Keyboard and Switch Access focus outline. */
     val focusRing: Color,
-    /** Hollow dot for a missed day in the calendar (S4). Never red, never a cross. */
+    /** Grey cross of a missed day in the week grid (#102). Never red. */
     val missedDay: Color,
     val streak: Color,
     val streakContainer: Color,

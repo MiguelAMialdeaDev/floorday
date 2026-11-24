@@ -1,4 +1,25 @@
 <resources>
     <string name="history_title">Historial</string>
-    <string name="history_empty">Aquí aparecerán tus días cerrados.</string>
+    <string name="history_empty">Cuando crees tu primer hábito, aquí verás sus últimos 7 días.</string>
+    <string name="history_week_heading">Últimos 7 días</string>
+    <string name="history_mark_done">hecho</string>
+    <string name="history_mark_missed">no hecho</string>
+    <string name="history_mark_open">pendiente</string>
+    <string name="history_mark_rest">no tocaba</string>
+    <!-- TalkBack, one per square: "lunes 23, hecho". -->
+    <string name="history_day_mark">%1$s %2$d, %3$s</string>
+    <string name="history_day_short_monday">L</string>
+    <string name="history_day_short_tuesday">M</string>
+    <string name="history_day_short_wednesday">X</string>
+    <string name="history_day_short_thursday">J</string>
+    <string name="history_day_short_friday">V</string>
+    <string name="history_day_short_saturday">S</string>
+    <string name="history_day_short_sunday">D</string>
+    <string name="history_day_full_monday">lunes</string>
+    <string name="history_day_full_tuesday">martes</string>
+    <string name="history_day_full_wednesday">miércoles</string>
+    <string name="history_day_full_thursday">jueves</string>
+    <string name="history_day_full_friday">viernes</string>
+    <string name="history_day_full_saturday">sábado</string>
+    <string name="history_day_full_sunday">domingo</string>
 </resources>
