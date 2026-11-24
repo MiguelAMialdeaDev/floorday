@@ -223,6 +223,9 @@ class TodayViewModelTest {
 
         override fun observeDay(day: LocalDate): Flow<List<Completion>> = delegate.observeDay(day)
 
+        override fun observeRange(from: LocalDate, to: LocalDate): Flow<List<Completion>> =
+            delegate.observeRange(from, to)
+
         override suspend fun upsert(completion: Completion) {
             gate()
             delegate.upsert(completion)

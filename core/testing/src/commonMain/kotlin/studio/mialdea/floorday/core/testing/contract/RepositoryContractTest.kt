@@ -207,6 +207,19 @@ abstract class RepositoryContractTest {
     }
 
     @Test
+    fun `observeRange devuelve las marcas de los dias del rango con los extremos incluidos`() = runTest {
+        val slot = aHabit().also { habits.save(it) }.slots.single()
+        val before = day.plus(-1, DateTimeUnit.DAY)
+        val last = day.plus(2, DateTimeUnit.DAY)
+        val after = day.plus(3, DateTimeUnit.DAY)
+        listOf(before, day, last, after).forEach { completions.upsert(aCompletion(slot, it)) }
+
+        val marks = completions.observeRange(day, last).first()
+
+        assertEquals(listOf(day, last), marks.map { it.day })
+    }
+
+    @Test
     fun `observeDay devuelve solo las marcas del dia ordenadas por hora de registro`() = runTest {
         val habit = aHabit { slot { label = "Mañana" }; slot { label = "Noche" } }
         val (morning, night) = habit.slots

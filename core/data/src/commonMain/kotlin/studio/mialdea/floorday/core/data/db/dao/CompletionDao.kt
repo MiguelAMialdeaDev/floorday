@@ -13,6 +13,10 @@ interface CompletionDao {
     @Query("SELECT * FROM completion WHERE day = :day ORDER BY recorded_at, slot_id")
     fun observeDay(day: LocalDate): Flow<List<CompletionEntity>>
 
+    // ISO dates sort as text, so BETWEEN on the day index is a date range.
+    @Query("SELECT * FROM completion WHERE day BETWEEN :from AND :to ORDER BY day, recorded_at, slot_id")
+    fun observeRange(from: LocalDate, to: LocalDate): Flow<List<CompletionEntity>>
+
     @Upsert
     suspend fun upsert(completion: CompletionEntity)
 

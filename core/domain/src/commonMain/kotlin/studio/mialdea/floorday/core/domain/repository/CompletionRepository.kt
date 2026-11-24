@@ -9,6 +9,9 @@ interface CompletionRepository {
     /** `day` is the logical day, not the calendar date. */
     fun observeDay(day: LocalDate): Flow<List<Completion>>
 
+    /** Marks of the logical days from [from] to [to], both included. */
+    fun observeRange(from: LocalDate, to: LocalDate): Flow<List<Completion>>
+
     /** A single row per (slotId, day): marking again replaces it. */
     suspend fun upsert(completion: Completion)
 

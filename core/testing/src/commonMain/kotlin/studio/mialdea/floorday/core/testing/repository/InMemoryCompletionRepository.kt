@@ -19,6 +19,15 @@ class InMemoryCompletionRepository(
             .map { t -> t.completions.values.filter { it.day == day }.sortedBy { it.recordedAt } }
             .distinctUntilChanged()
 
+    override fun observeRange(from: LocalDate, to: LocalDate): Flow<List<Completion>> =
+        store.tables
+            .map { t ->
+                t.completions.values
+                    .filter { it.day in from..to }
+                    .sortedWith(compareBy({ it.day }, { it.recordedAt }))
+            }
+            .distinctUntilChanged()
+
     override suspend fun upsert(completion: Completion) {
         store.write { t -> t.withCompletion(completion) }
     }

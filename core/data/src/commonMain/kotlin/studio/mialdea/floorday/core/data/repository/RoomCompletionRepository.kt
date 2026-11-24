@@ -19,6 +19,11 @@ class RoomCompletionRepository(database: FloordayDatabase) : CompletionRepositor
             .map { rows -> rows.map { it.toDomain() } }
             .distinctUntilChanged()
 
+    override fun observeRange(from: LocalDate, to: LocalDate): Flow<List<Completion>> =
+        dao.observeRange(from, to)
+            .map { rows -> rows.map { it.toDomain() } }
+            .distinctUntilChanged()
+
     override suspend fun upsert(completion: Completion) {
         dao.upsert(completion.toEntity())
     }
